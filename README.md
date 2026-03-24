@@ -9,6 +9,7 @@ Install once. Invoke any specialist directly from your Claude Code session.
 ## Install
 
 ```
+/plugin marketplace add pranav8494/agents-team 
 /plugin install agents-team@pranav8494
 ```
 
