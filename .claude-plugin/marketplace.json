@@ -9,7 +9,7 @@
     {
       "name": "agents-team",
       "description": "A full SDLC team of specialized AI agents — frontend designer, backend engineer, data analyst, UX researcher, senior engineer, DevEx, product manager, and QA engineer. Each agent has grounded expertise, a distinct communication style, and asks permission before taking any action.",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "source": "./",
       "author": {
         "name": "Pranav Pandey",

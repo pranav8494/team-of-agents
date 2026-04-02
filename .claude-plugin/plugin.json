@@ -1,7 +1,7 @@
 {
   "name": "agents-team",
   "description": "A Claude Code plugin providing a full SDLC team of specialized AI agents — frontend designer, backend engineer, data analyst, UX researcher, senior engineer, DevEx, product manager, and QA engineer. Each agent has grounded expertise, a distinct communication style, and asks permission before taking any action.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "Pranav Pandey",
     "url": "https://github.com/pranav8494"
