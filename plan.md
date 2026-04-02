@@ -1,11 +1,11 @@
-# agents-team — Implementation Plan
+# team-of-agents — Implementation Plan
 
 ## What We're Building
 
 A **Claude Code plugin** that gives users a team of specialized AI agents — each a distinct expert role covering the full SDLC. Users install it once and invoke roles directly in Claude Code. No Python, no server, no separate terminal.
 
 ```
-/plugin install agents-team@pranav8494
+/plugin install team-of-agents@pranav8494
 ```
 
 Then use it like:
@@ -26,8 +26,8 @@ Then use it like:
 ## Distribution Model (Same as superpowers)
 
 - **Format:** GitHub repo with `.claude-plugin/` config + `skills/` markdown files
-- **Install:** `/plugin install agents-team@pranav8494` in Claude Code
-- **Update:** `/plugin update agents-team`
+- **Install:** `/plugin install team-of-agents@pranav8494` in Claude Code
+- **Update:** `/plugin update team-of-agents`
 - **Contribute:** Add a new `skills/role-name/SKILL.md` + PR
 
 No npm, no pip, no MCP server needed.
@@ -68,7 +68,7 @@ This rule also belongs in `CONTRIBUTING.md` so future contributors follow it.
 ## Project Structure
 
 ```
-agents-team/
+team-of-agents/
 ├── .claude-plugin/
 │   ├── plugin.json
 │   └── marketplace.json
@@ -152,7 +152,7 @@ Always:
 ## Verification (After S14)
 
 ```bash
-/plugin install agents-team@pranav8494
+/plugin install team-of-agents@pranav8494
 
 /frontend-designer  create a navbar component in React
 /backend-engineer   design a REST API for user auth
