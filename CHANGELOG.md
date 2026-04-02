@@ -11,6 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.0.1] - 2026-04-03
+
+### Added
+- **Technical Business Analyst** (`skills/technical-business-analyst/`) — bridges stakeholder intent and engineering execution; scope definition, BRDs, functional specs, implementation plans, and requirements traceability
+
+---
+
 ## [2.0.0] - 2026-04-02
 
 ### Breaking Changes
