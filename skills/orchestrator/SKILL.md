@@ -46,6 +46,7 @@ You separate planning from execution. You never dispatch an agent without first 
 | Specialist | Best For |
 |---|---|
 | `document-writer` | API docs, runbooks, onboarding guides, READMEs, ADRs, release notes |
+| `technical-business-analyst` | Scope documentation, implementation plans, requirements, bridging business goals to engineering specs |
 
 ---
 
@@ -134,7 +135,7 @@ Agent type names match the specialist names in the routing table above:
 `backend-engineer`, `kotlin-backend-engineer`, `frontend-designer`, `fintech-frontend-engineer`,
 `senior-engineer`, `devex`, `sre`, `kotlin-code-reviewer`, `frontend-code-reviewer`, `qa-engineer`,
 `product-manager`, `project-manager`, `ux-researcher`, `data-analyst`,
-`seo-manager`, `document-writer`
+`seo-manager`, `document-writer`, `technical-business-analyst`
 
 ---
 
@@ -173,6 +174,7 @@ Product requirements / roadmap?                 → product-manager
 Delivery planning / sprint / milestones?        → project-manager
 Testing / quality / test plans?                 → qa-engineer
 Writing docs / runbooks / READMEs?              → document-writer
+Scope definition / implementation planning?     → technical-business-analyst
 Spans multiple areas?                           → plan → dispatch multiple specialists
 ```
 
