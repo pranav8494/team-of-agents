@@ -1,4 +1,4 @@
-# Contributing to agents-team
+# Contributing to team-of-agents
 
 Thank you for contributing. This project aims to be a best-practices reference for role-based AI agents grounded in real-world role definitions.
 
@@ -6,7 +6,7 @@ Thank you for contributing. This project aims to be a best-practices reference f
 
 ## The Research-First Rule
 
-> **Before writing or updating any `SKILL.md`, research the role from reliable external sources.**
+> **Before writing or updating any `SKILL.md` or agent definition, research the role from reliable external sources.**
 
 The goal is for each agent to behave like a *real* practitioner in that field — not a generic AI assistant with a job title attached.
 
@@ -28,29 +28,29 @@ Include your sources in the PR description.
 
 ## Adding a New Role
 
+Every new role requires **two files**: a user-invocable skill and a subagent definition.
+
 ### 1. Research the role
 
-Before writing a single line of the skill, research:
+Before writing a single line, research:
 - What does this role actually do day to day?
-- What skills and tools do practitioners in this role use? (check surveys and job descriptions)
+- What skills and tools do practitioners use? (check surveys and job descriptions)
 - What separates a great practitioner from an average one?
 - How do they think and communicate with other roles?
 
-### 2. Create the skill file
+### 2. Create the skill file (user-invocable)
 
 ```bash
 mkdir skills/your-role-name
 touch skills/your-role-name/SKILL.md
 ```
 
-### 3. Follow the skill template
-
-Every skill must include:
+Every skill must follow this template:
 
 ```markdown
 ---
 name: your-role-name
-description: "One-line trigger description. Be specific about when to invoke this role."
+description: "Use when [specific trigger condition]. One sentence, be specific."
 ---
 
 # Role Title
@@ -77,20 +77,62 @@ Always:
 [Step-by-step approach to a typical task in this role]
 ```
 
-### 4. Test your skill
+### 3. Create the agent definition (subagent for orchestrator dispatch)
 
-Invoke your skill in Claude Code and verify:
+```bash
+touch agents/your-role-name.md
+```
+
+Agent definitions are condensed system prompts used when the orchestrator dispatches this specialist as a subagent. They are shorter than skills and optimised for focused, isolated execution:
+
+```markdown
+---
+name: your-role-name
+description: "[Specialist type]. Invoke for [specific tasks]. Returns [output format]."
+model: inherit
+tools: Read, Write, Edit, Bash, Glob, Grep
+disallowedTools: Agent
+---
+
+# Role Title
+
+[2-3 sentence persona. Core expertise areas. Philosophy in one sentence.]
+
+## Expertise
+[Bullet list of specific skills, tools, frameworks]
+
+## How You Work
+[5-7 numbered steps — concise workflow for this role's core tasks]
+
+## Output Format
+[What the agent returns: implementation, analysis, structured artefact, etc.]
+```
+
+**Important:** Always include `disallowedTools: Agent` — subagents cannot spawn further agents.
+
+### 4. Update the orchestrator routing table
+
+Add the new role to `skills/orchestrator/SKILL.md` in the appropriate category (Engineering, Product, GTM, or Content) with a one-line description of what it's best for.
+
+### 5. Test your skill
+
+Invoke your skill directly in Claude Code:
 - [ ] The agent adopts the correct persona and expertise
 - [ ] It announces intended actions before taking them
 - [ ] It asks for confirmation before writing files or running commands
 - [ ] The expertise listed matches what the role actually does in practice
 
-### 5. Submit a PR
+Test via the orchestrator:
+- [ ] The orchestrator correctly routes tasks to your new role
+- [ ] The agent definition works when dispatched as a subagent
+
+### 6. Submit a PR
 
 Your PR description should include:
-- The role you're adding and why it belongs in a software development team
+- The role you're adding and why it belongs in the team
 - The sources you used for your research
 - A brief summary of what makes this skill accurate to the real role
+- Confirmation that both `skills/` and `agents/` files were created
 
 ---
 
@@ -110,11 +152,11 @@ Changes to existing skills will be reviewed carefully — they affect everyone u
 
 This project follows [Semantic Versioning](https://semver.org/):
 
-- **Patch** (`1.0.x`) — bug fixes to existing skills (typos, minor clarifications)
-- **Minor** (`1.x.0`) — new roles added
-- **Major** (`x.0.0`) — breaking changes to skill structure or plugin format
+- **Patch** (`x.x.1`) — bug fixes to existing skills (typos, minor clarifications)
+- **Minor** (`x.1.0`) — new roles added
+- **Major** (`1.0.0`) — breaking changes to skill names, plugin structure, or orchestrator behaviour
 
-Update `CHANGELOG.md` and `package.json` version in your PR.
+Update `CHANGELOG.md`, `package.json`, `.claude-plugin/plugin.json`, and `.claude-plugin/marketplace.json` in your PR.
 
 ---
 

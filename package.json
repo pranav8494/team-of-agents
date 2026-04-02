@@ -1,14 +1,14 @@
 {
-  "name": "agents-team",
-  "version": "1.0.0",
-  "description": "A Claude Code plugin providing a team of specialized AI agents for the full SDLC — frontend designer, backend engineer, data analyst, UX researcher, senior engineer, DevEx, product manager, and QA engineer.",
+  "name": "team-of-agents",
+  "version": "2.0.0",
+  "description": "A Claude Code plugin providing a full SDLC team of specialised AI agents with an orchestrator that plans tasks and dispatches specialist subagents.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pranav8494/agents-team.git"
+    "url": "https://github.com/pranav8494/team-of-agents.git"
   },
-  "homepage": "https://github.com/pranav8494/agents-team",
+  "homepage": "https://github.com/pranav8494/team-of-agents.git",
   "bugs": {
-    "url": "https://github.com/pranav8494/agents-team/issues"
+    "url": "https://github.com/pranav8494/team-of-agents/issues"
   },
   "author": "pranav8494",
   "license": "MIT",
@@ -17,14 +17,21 @@
     "claude-code",
     "plugin",
     "agents",
+    "orchestrator",
+    "subagents",
     "ai-team",
     "sdlc",
     "frontend",
     "backend",
+    "kotlin",
     "data-analyst",
     "ux",
     "devex",
     "product-manager",
-    "qa"
+    "project-manager",
+    "qa",
+    "document-writer",
+    "code-reviewer",
+    "seo"
   ]
 }
