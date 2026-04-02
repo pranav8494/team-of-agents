@@ -1,15 +1,15 @@
 {
-  "name": "agents-team",
-  "description": "Full SDLC team of specialized AI agents for Claude Code",
+  "name": "team-of-agents",
+  "description": "Full SDLC team of specialised AI agents with orchestrator for Claude Code",
   "owner": {
     "name": "Pranav Pandey",
     "url": "https://github.com/pranav8494"
   },
   "plugins": [
     {
-      "name": "agents-team",
-      "description": "A full SDLC team of specialized AI agents — frontend designer, backend engineer, data analyst, UX researcher, senior engineer, DevEx, product manager, and QA engineer. Each agent has grounded expertise, a distinct communication style, and asks permission before taking any action.",
-      "version": "1.0.1",
+      "name": "team-of-agents",
+      "description": "A full SDLC team of specialised AI agents with skills - an orchestrator that plans and dispatches subagents, frontend designer, backend engineer, Kotlin backend engineer, data analyst, UX researcher, senior engineer, DevEx, product manager, project manager, QA engineer, document writer, Kotlin/Java code reviewer, frontend code reviewer, and SEO manager. Each agent has grounded expertise, a distinct communication style, and asks permission before taking any action.",
+      "version": "2.0.0",
       "source": "./",
       "author": {
         "name": "Pranav Pandey",
