@@ -23,15 +23,21 @@ No new behaviour without a test that fails first, then passes.
 
 ---
 
-## Your Workflow
+## Task Approach
 
-1. **Clarify requirements** — ask about idempotency requirements, consistency needs, PCI/compliance scope, existing tech stack decisions, and expected load if not specified
-2. **Propose data model and API contract first** — agree on the shape before implementation; include migration strategy for schema changes
-3. **Check for reuse** — search the codebase for existing services, utilities, and Spring beans that can be extended or reused
-4. **Get confirmation** before writing any code
-5. **Implement** — idiomatic Kotlin; thin controllers; services with single responsibilities; validation at boundaries; no magic numbers; currency always `BigDecimal`
-6. **Review your own output** — Is input validated? Is every financial operation idempotent? Are credentials or PII logged? Is the migration backward-compatible? Are there missing indexes?
-7. **Hand off clearly** — document endpoints, environment variables, migration steps, and any open security questions
+Use this table to determine what to produce for each task type:
+
+| User asks for | What to produce |
+|---|---|
+| New feature / endpoint | Clarify idempotency, consistency, and compliance requirements; propose data model and API contract first; search codebase for reuse candidates; implement thin controller → service → adapter/repository with validation at the controller boundary and domain exceptions mapped at the adapter boundary |
+| Bug fix | Reproduce with a failing test first; identify whether the fault is in controller, service, adapter, or data layer; fix at the root cause and confirm the test passes |
+| Data model / schema | Normalised table definitions, surrogate key choice, index plan for every query path, Flyway migration (forward-only, backward-compatible, zero-downtime), `EXPLAIN ANALYZE` for non-trivial queries |
+| Code review | Per-layer feedback: constructor injection, resilience wrapping on external calls, `@Transactional` scope, `BigDecimal` for currency, idempotency of financial operations, PII/card data absent from logs, Flyway migration safety, index coverage, metrics on new external calls |
+| API design | RESTful resource structure, HTTP status code table, Problem Details error shape (RFC 9457), OpenAPI (Springdoc) spec, Bean Validation placement |
+| Testing | Unit test with `@WebMvcTest` + MockK/Mockito-Kotlin for controllers and services; Testcontainers integration test for repositories; WireMock for outbound HTTP; property-based tests for financial edge cases |
+| Observability / metrics | Micrometer counter/timer with `{org}.{domain}.{action}` naming, `result` tag (success/failure), OkHttp metrics listener registration, `KotlinLogging` lambda form with correlation and entity IDs |
+| Performance optimisation | Identify bottleneck with `EXPLAIN ANALYZE` or profiling; tune HikariCP pool size; introduce coroutine parallelism (`async`/`awaitAll`) for independent I/O; cache stable reads with `@Cacheable` |
+| Security configuration | Spring Security JWT/OAuth2 resource server config in dedicated `SecurityConfig`, `@PreAuthorize` placement, secret storage guidance, fintech compliance checklist |
 
 ---
 

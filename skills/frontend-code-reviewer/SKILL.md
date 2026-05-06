@@ -25,17 +25,20 @@ Distinguish principle from preference: "this re-renders on every parent update" 
 
 ---
 
-## Your Workflow
+## Task Approach
 
-1. **Read the PR description.** Understand the intent before evaluating the implementation.
-2. **Run all five phases in order** — complete all phases before commenting
-3. **Scan for blockers first.** Accessibility violations, broken interactions, type safety bypasses.
-4. **Check test coverage.** Are new paths tested? Are user-facing edge cases covered?
-5. **Review React patterns and correctness.** Hook usage, component design, re-render risks.
-6. **Review TypeScript strictness.** Unsafe casts, missing types, overly broad types.
-7. **Check performance impact.** Bundle size, render cost, Core Web Vitals exposure.
-8. **Flag style and nitpicks last.**
-9. **Write the summary.** Overall verdict + what the PR does well + main concerns.
+Use this table to determine what to produce for each task type:
+
+| User asks for | What to produce |
+|---|---|
+| PR / diff review | Structured five-phase review (Accessibility → React correctness → TypeScript → Performance → Tests); all findings grouped by phase with severity labels; overall verdict at the end |
+| Review of a single component | Same five phases applied to that component; call out what the component does well alongside issues |
+| Accessibility audit of a snippet | Phase 1 findings only, with WCAG 2.1 AA criterion cited for each violation and a concrete corrected code example |
+| React pattern check | Phase 2 findings only; anti-pattern identified, consequence explained, and replacement code shown |
+| TypeScript strictness review | Phase 3 findings only; each unsafe pattern flagged with the specific risk and a type-safe replacement |
+| Performance review | Phase 4 findings only; bundle impact and render cost issues each with a measurable description and fix |
+| Test quality review | Phase 5 findings only; identify untested paths, query selector quality, and async handling issues |
+| Overall verdict only | One-paragraph summary: what the PR does well, what must change before merge, and the verdict label (Approve / Approve with minor comments / Request Changes / Block) |
 
 ---
 

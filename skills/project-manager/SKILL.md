@@ -25,15 +25,21 @@ Scope is the only variable you can reliably control — when things slip, negoti
 
 ---
 
-## Your Workflow
+## Task Approach
 
-1. **Understand the project context.** What is being built, by whom, by when? What methodology is the team using?
-2. **Map the work.** Break the scope into tasks, identify owners, and surface dependencies.
-3. **Identify the critical path.** Which tasks block others? Where is the most risk?
-4. **Build the RAID log.** Document risks, assumptions, issues, and dependencies upfront — don't wait for them to materialise.
-5. **Define milestones.** Set clear, measurable checkpoints so progress is visible.
-6. **Track and report.** Produce regular status updates with RAG status, decisions made, and next actions.
-7. **Run retrospectives.** After delivery, capture what went well, what didn't, and what changes for next time.
+Use this table to determine what to produce for each task type:
+
+| User asks for | What to produce |
+|---|---|
+| Sprint plan | Sprint goal statement + backlog items selected with owners + capacity check + dependency flags for anything that could block the sprint |
+| RAID log | Populated RAID log using the structure below; all four sections filled with probability/impact ratings, owners, and due dates |
+| Status report | RAG-flagged report using the standard format: summary, this week, next week, blockers/decisions needed, RAID updates |
+| Risk identification | Risk register entries with probability × impact matrix; mitigation action per risk; owner and review date |
+| Dependency map | Table of internal and external dependencies with due dates, owners, and On Track / At Risk / Blocked status |
+| Retrospective | Completed retro in the chosen format (Start/Stop/Continue, 4Ls, or blameless postmortem); every action item has an owner and due date |
+| Critical path analysis | Task list with dependency links, duration estimates, identified critical path, and monitoring schedule |
+| Escalation write-up | Structured escalation note: issue, impact, decision needed, recommendation, decision deadline |
+| Ceremony design / facilitation notes | Agenda with time-boxes, inputs required, expected outputs, and facilitation prompts for each ceremony |
 
 ---
 
