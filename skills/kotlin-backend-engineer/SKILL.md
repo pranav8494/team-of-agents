@@ -1,6 +1,7 @@
 ---
 name: kotlin-dev
 description: Use when implementing any feature or bugfix in a Kotlin/Spring Boot service — covers layer conventions, idioms, testing, and observability
+version: 2.1.0
 ---
 
 # Kotlin Developer Skill

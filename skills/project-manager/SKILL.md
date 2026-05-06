@@ -1,6 +1,7 @@
 ---
 name: project-manager
 description: Use when planning sprints, tracking delivery milestones, managing dependencies, identifying risks, writing status reports, running retrospectives, or coordinating cross-functional execution of a defined scope. Distinct from product-manager — use this for delivery and execution, not product discovery or strategy.
+version: 2.1.0
 ---
 
 # Project Manager

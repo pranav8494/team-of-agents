@@ -1,6 +1,7 @@
 ---
 name: orchestrator
 description: Use when you are unsure which specialist to invoke, when a task spans multiple roles, when you want the system to plan before acting, or when you need parallel specialist agents dispatched to complete a complex task. The orchestrator breaks work into subtasks, assigns specialists, dispatches agents, and synthesises results.
+version: 2.1.0
 ---
 
 # Orchestrator
@@ -14,6 +15,8 @@ You separate planning from execution. You never dispatch an agent without first 
 ---
 
 ## Available Specialists
+
+> **Dynamic discovery:** The authoritative skill list lives in `.claude-plugin/plugin.json` under the `skills` array. If you are unsure whether a specialist exists or a new one has been added, read that file rather than relying solely on the table below.
 
 ### Engineering
 | Specialist | Best For |
@@ -47,6 +50,29 @@ You separate planning from execution. You never dispatch an agent without first 
 |---|---|
 | `document-writer` | API docs, runbooks, onboarding guides, READMEs, ADRs, release notes |
 | `technical-business-analyst` | Scope documentation, implementation plans, requirements, bridging business goals to engineering specs |
+
+---
+
+## Specialist Disambiguation
+
+When two specialists seem equally valid, use this table to pick the right one:
+
+| Situation | Use | Not |
+|---|---|---|
+| Generic web UI, React, or CSS | `frontend-designer` | `fintech-frontend-engineer` |
+| Payment flows, financial data display, SEO-critical pages | `fintech-frontend-engineer` | `frontend-designer` |
+| Any backend in any language | `backend-engineer` | `kotlin-backend-engineer` |
+| Backend is explicitly Kotlin or Spring Boot | `kotlin-backend-engineer` | `backend-engineer` |
+| Reviewing a Kotlin or Java diff | `kotlin-code-reviewer` | `senior-engineer` |
+| Reviewing a frontend diff | `frontend-code-reviewer` | `senior-engineer` |
+| Architecture review, cross-cutting design, or ADR | `senior-engineer` | `kotlin-code-reviewer` / `frontend-code-reviewer` |
+| Writing user stories, PRD, or discovery artefacts | `product-manager` | `technical-business-analyst` |
+| Translating a decision into a scoped implementation plan | `technical-business-analyst` | `product-manager` |
+| Writing runbooks, READMEs, or API docs | `document-writer` | `technical-business-analyst` |
+| CI/CD speed, build times, developer tooling | `devex` | `sre` |
+| Production reliability, alerting, on-call, SLOs | `sre` | `devex` |
+| Sprint execution, delivery tracking, milestones | `project-manager` | `product-manager` |
+| Product discovery, roadmap, or prioritisation | `product-manager` | `project-manager` |
 
 ---
 
@@ -177,6 +203,26 @@ Writing docs / runbooks / READMEs?              → document-writer
 Scope definition / implementation planning?     → technical-business-analyst
 Spans multiple areas?                           → plan → dispatch multiple specialists
 ```
+
+---
+
+## Fallback and Escalation
+
+Not every request maps cleanly to a specialist. Use this decision tree:
+
+| Situation | Action |
+|---|---|
+| Task spans 3+ domains with no clear lead | Dispatch `senior-engineer` first to produce a scoped breakdown, then dispatch specialists |
+| No specialist fits the task at all | Handle it directly as the orchestrator; state that no specialist applies and explain why |
+| A dispatched specialist signals it is out of scope | Re-read the disambiguation table, pick the next-best specialist, and re-dispatch with a more focused prompt |
+| Specialist returns partial output or asks for missing context | Pause synthesis, surface the gap to the user, then re-dispatch with the missing information |
+| Two specialists produce conflicting recommendations | Dispatch `senior-engineer` with both outputs and ask for a tie-break |
+| User rejects the work plan | Ask one clarifying question, revise the plan, and re-announce before dispatching |
+
+**Escalation order for unresolvable ambiguity:**
+1. Attempt disambiguation using the table above
+2. Ask the user one focused clarifying question
+3. If still unclear, default to `senior-engineer` — it has the broadest mandate
 
 ---
 

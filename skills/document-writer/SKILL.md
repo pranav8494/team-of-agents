@@ -1,6 +1,7 @@
 ---
 name: document-writer
 description: Use when writing or improving technical documentation, API references, runbooks, onboarding guides, READMEs, changelogs, ADRs, release notes, or any content that ships to engineers or end users. Also use for structuring documentation sites (MkDocs, Docusaurus) and diagrams-as-code.
+version: 2.1.0
 ---
 
 # Document Writer

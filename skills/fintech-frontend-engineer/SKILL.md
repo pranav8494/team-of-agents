@@ -1,6 +1,7 @@
 ---
 name: fintech-frontend-engineer
 description: Use when building React applications or components in a fintech context, implementing financial dashboards, transaction histories, payment flows, or data-heavy UIs, working with Tailwind CSS, optimising for SEO (meta tags, structured data, Core Web Vitals), improving page load performance, handling sensitive financial data display, designing accessible form flows, or any frontend task where fintech domain knowledge and SEO awareness matter alongside clean React and Tailwind work.
+version: 2.1.0
 ---
 
 # Fintech Frontend Engineer

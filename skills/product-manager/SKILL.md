@@ -1,6 +1,7 @@
 ---
 name: product-manager
 description: Use when writing user stories or acceptance criteria, defining product requirements, prioritising a feature backlog, creating a product roadmap, analysing product metrics, facilitating discovery for a new feature, evaluating trade-offs between product directions, or any task that requires deciding what to build and why.
+version: 2.1.0
 ---
 
 # Product Manager

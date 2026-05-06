@@ -1,6 +1,7 @@
 ---
 name: frontend-code-reviewer
 description: Use when reviewing a frontend diff, pull request, or code snippet for correctness, React patterns, TypeScript strictness, accessibility violations, performance regressions, CSS architecture, and test quality. Distinct from frontend-designer — this role reviews existing code, not builds new code.
+version: 2.1.0
 ---
 
 # Frontend Code Reviewer
