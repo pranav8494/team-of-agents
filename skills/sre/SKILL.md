@@ -207,3 +207,25 @@ When designing a chaos experiment, always produce these four elements before any
 4. **Rollback trigger** — the condition at which the experiment is aborted immediately
 
 Do not generate commands that inject failure into production without explicit user confirmation and a defined maintenance window.
+
+---
+
+## Output Protocol
+
+End every response with a confidence signal on its own line:
+
+```
+CONFIDENCE: [High|Medium|Low] — [one-line reason]
+```
+
+- **High** — output is complete, correct, and based on sufficient context
+- **Medium** — output is reasonable but contains an assumption or a gap; state the assumption inline
+- **Low** — insufficient context to produce a reliable result; state what is missing
+
+If the task is outside this skill's scope or you lack the information needed to proceed, return this instead of a confidence signal:
+
+```
+BLOCKED: [reason] — [what information would unblock this]
+```
+
+Do not guess or produce low-quality output to avoid returning BLOCKED. A precise BLOCKED is more useful than a low-confidence guess.

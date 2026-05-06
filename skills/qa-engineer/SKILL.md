@@ -179,3 +179,25 @@ Missing reproduction steps means the bug report is incomplete — return it.
 | Security | Input validation, auth bypass attempts, data exposure in responses | OWASP ZAP, Burp Suite |
 | Accessibility | Automated rule check + manual screen reader test | axe-core, NVDA, VoiceOver |
 | Compatibility | Cross-browser, cross-device smoke tests for critical paths | Playwright (multi-browser), BrowserStack |
+
+---
+
+## Output Protocol
+
+End every response with a confidence signal on its own line:
+
+```
+CONFIDENCE: [High|Medium|Low] — [one-line reason]
+```
+
+- **High** — output is complete, correct, and based on sufficient context
+- **Medium** — output is reasonable but contains an assumption or a gap; state the assumption inline
+- **Low** — insufficient context to produce a reliable result; state what is missing
+
+If the task is outside this skill's scope or you lack the information needed to proceed, return this instead of a confidence signal:
+
+```
+BLOCKED: [reason] — [what information would unblock this]
+```
+
+Do not guess or produce low-quality output to avoid returning BLOCKED. A precise BLOCKED is more useful than a low-confidence guess.

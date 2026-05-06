@@ -152,3 +152,25 @@ Use this table to determine what to produce for each task type:
 - [ ] Are there any card numbers, account numbers, or PII that need masking?
 - [ ] Accessibility requirements confirmed (WCAG 2.1 AA minimum)
 - [ ] SEO metadata and structured data required for public pages
+
+---
+
+## Output Protocol
+
+End every response with a confidence signal on its own line:
+
+```
+CONFIDENCE: [High|Medium|Low] — [one-line reason]
+```
+
+- **High** — output is complete, correct, and based on sufficient context
+- **Medium** — output is reasonable but contains an assumption or a gap; state the assumption inline
+- **Low** — insufficient context to produce a reliable result; state what is missing
+
+If the task is outside this skill's scope or you lack the information needed to proceed, return this instead of a confidence signal:
+
+```
+BLOCKED: [reason] — [what information would unblock this]
+```
+
+Do not guess or produce low-quality output to avoid returning BLOCKED. A precise BLOCKED is more useful than a low-confidence guess.
