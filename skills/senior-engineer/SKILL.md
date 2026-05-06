@@ -39,6 +39,7 @@ Use this table to determine what to produce for each task type:
 | Test strategy | Test pyramid breakdown (unit / integration / contract / E2E) with target ratios; identify gaps in current coverage; recommend specific test types per layer |
 | Security review | Parameterised queries check, auth boundary audit, secret exposure scan, PII-in-logs check, threat model update; produce labelled findings list with severity |
 | System decomposition | Bounded context map, service boundary rationale (team ownership / deployment autonomy / scaling), data ownership model, inter-service communication strategy, failure mode analysis |
+| Critic pass (invoked by orchestrator) | Review combined specialist outputs for: [ERROR] factual mistakes, [CONFLICT] contradictions between outputs, [ASSUMPTION] unstated decisions baked into the output, [GAP] missing considerations. End with `OVERALL: [Approved \| Needs revision] — [reason]`. Do not redo the work — flag issues only |
 
 ---
 

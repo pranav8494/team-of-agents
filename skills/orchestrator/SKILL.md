@@ -178,6 +178,28 @@ CONFIDENCE SIGNAL: End your response with — CONFIDENCE: [High|Medium|Low] — 
 
 If the specialist cannot proceed, it returns `BLOCKED: [reason] — [what would unblock it]` instead of a confidence signal. See Fallback and Escalation for handling.
 
+### Shared Findings Scratchpad
+
+When running parallel agents, capture key findings from each as they complete and pass them to any subsequent sequential agents via the CONTEXT field.
+
+Format:
+
+```
+FINDINGS:
+- [specialist-name]: [key decision, fact, or constraint downstream agents need to know]
+- [specialist-name]: [key finding]
+```
+
+Example:
+
+```
+FINDINGS:
+- ux-researcher: Users abandon at the payment step due to lack of trust signals, not form complexity
+- data-analyst: Checkout abandonment is 67%; mobile is 2× worse than desktop
+```
+
+Include the full FINDINGS block in the CONTEXT field of every subsequent sequential agent's Context Envelope. This is the lightweight shared-memory mechanism between parallel runs.
+
 ---
 
 ## Phase 5 — Synthesise
@@ -197,13 +219,53 @@ Then produce a unified summary:
 ```
 [Orchestrator] Complete.
 
+Agent Trace:
+| Agent | Task | Confidence | Action taken |
+|---|---|---|---|
+| [specialist] | [what it was asked to do] | High | Included in synthesis |
+| [specialist] | [what it was asked to do] | Medium — assumed X | Included; assumption flagged below |
+| [specialist] | [what it was asked to do] | BLOCKED — missing Y | Skipped; gap surfaced below |
+| [specialist] | [what it was asked to do] | FAILED (no output) | Skipped; retry recommended |
+
 What was done:
-- [Agent A] [CONFIDENCE: High]: [what they produced / files changed]
-- [Agent B] [CONFIDENCE: Medium — assumed X]: [what they produced; confirm X before applying]
+- [Agent A]: [what they produced / files changed]
+- [Agent B]: [what they produced / files changed]
+
+Assumptions to confirm:
+- [Agent B] assumed [X] — confirm before applying
+
+Gaps and blocks:
+- [Agent C] was blocked on [Y] — provide [Z] to unblock
 
 Follow-up needed:
-- [Any open questions, unresolved blocks, or next steps]
+- [Any open questions or next steps]
 ```
+
+---
+
+## Phase 5.5 — Optional Critic Pass
+
+Invoke `senior-engineer` as a critic after Phase 5 synthesis under any of these conditions:
+
+| Condition | Example |
+|---|---|
+| Any specialist returned `CONFIDENCE: Medium` or `CONFIDENCE: Low` | Output has stated assumptions or gaps that affect correctness |
+| Task involves architecture decisions or cross-cutting concerns | Decisions affect multiple services, teams, or long-term structure |
+| Two specialists produced conflicting recommendations | backend-engineer and senior-engineer disagree on data model approach |
+| User explicitly requests a second opinion | "double-check this", "get a second set of eyes" |
+
+**Critic dispatch — use this Context Envelope:**
+
+```
+TASK: Review the following specialist outputs for errors, conflicts, and unstated assumptions. Do not redo the work.
+CONTEXT: [paste all specialist outputs and the agent trace]
+CONSTRAINTS: Flag issues only. Do not produce new implementations.
+OUTPUT FORMAT: Bulleted list where each item is labelled [ERROR], [CONFLICT], [ASSUMPTION], or [GAP].
+  End with: OVERALL: [Approved | Needs revision] — [one-line reason]
+CONFIDENCE SIGNAL: End with CONFIDENCE: [High|Medium|Low] — [one-line reason]
+```
+
+If the critic returns `OVERALL: Needs revision`, surface the flagged issues to the user before presenting the synthesis. Do not suppress the original specialist output — present both.
 
 ---
 
@@ -258,6 +320,8 @@ Not every request maps cleanly to a specialist. Use this decision tree:
 | Specialist returns `BLOCKED: [reason] — [what would unblock]` | If missing info is already in context: re-dispatch with it explicitly included. If it requires user input: pause and ask. If out of scope for all specialists: handle directly as orchestrator |
 | Two specialists produce conflicting recommendations | Dispatch `senior-engineer` with both outputs and ask for a tie-break |
 | User rejects the work plan | Ask one clarifying question, revise the plan, and re-announce before dispatching |
+| Agent returns no output or clearly malformed response | Retry once with a narrower, simpler scope. If retry also fails, mark as FAILED in the trace log, surface to the user, and continue synthesis with remaining outputs — never block the whole run on one failed agent |
+| Multiple agents fail or are blocked | Do not wait for them. Complete synthesis with available outputs; mark all FAILED/BLOCKED tasks explicitly in the trace log; present partial results with clear gaps noted |
 
 **Escalation order for unresolvable ambiguity:**
 1. Attempt disambiguation using the table above
