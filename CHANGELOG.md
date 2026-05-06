@@ -11,6 +11,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.1.0] - 2026-05-06
+
+### Added
+- `Iron Law` section to all 18 skills — a concrete, role-specific non-negotiable principle
+- `Task Approach` table to all 17 specialist skills — maps task type to what Claude should produce
+- `Output Protocol` section to all 17 specialist skills — defines `CONFIDENCE: [High|Medium|Low]` and `BLOCKED:` signal contract
+- `version: 2.1.0` in frontmatter of all 18 skills
+- `skills` manifest array in `.claude-plugin/plugin.json` with path and version per skill (dynamic capability discovery)
+- Specialist disambiguation table in orchestrator — 14-row lookup resolving overlapping specialist boundaries
+- Fallback and escalation section in orchestrator — decision table and escalation order
+- Context Envelope format in orchestrator Phase 4 — standard five-field structure for every agent dispatch (TASK / CONTEXT / CONSTRAINTS / OUTPUT FORMAT / CONFIDENCE SIGNAL)
+- Trust Tier Model in orchestrator — T1 research, T2 artifact, T3 execution with required confirmation levels
+- Confidence routing in orchestrator Phase 5 — orchestrator acts on High / Medium / Low / BLOCKED signals
+- BLOCKED signal handling in orchestrator Fallback — three-branch resolution
+- Shared Findings Scratchpad in orchestrator Phase 4 — lightweight shared-memory mechanism for parallel agent runs
+- Agent Trace Log in orchestrator Phase 5 synthesis format
+- Optional Critic Pass (Phase 5.5) in orchestrator — conditions table and dispatch envelope for invoking `senior-engineer` as a reviewer
+- Timeout and partial-failure recovery in orchestrator Fallback — retry protocol and multi-agent partial-completion rule
+- `technical-business-analyst` added to orchestrator routing tables and specialist disambiguation
+
+### Changed
+- All 17 specialist skills rewritten from persona-based ("You are a...") to action-oriented (task type → output). Removed `## Your Workflow` (day-in-the-life checklists) from all skills
+- SRE skill fully rewritten: removed on-call staffing targets and incident coordination content; replaced with Task Approach table covering SLO definition, observability design, alert rules, PRR, runbooks, postmortems, toil audits, IaC, and chaos experiment design
+- Orchestrator routing table updated with dynamic discovery note pointing to `plugin.json` as source of truth
+
+---
+
+## [2.0.2] - 2026-04-03
+
+### Fixed
+- Version bump in `marketplace.json` and `package.json` to align with `plugin.json` (both were still on 2.0.2 after the 2.1.0 bump in plugin.json)
+
+---
+
 ## [2.0.1] - 2026-04-03
 
 ### Added
