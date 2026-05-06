@@ -110,13 +110,14 @@ Present the work plan to the user before dispatching any agents:
 [Orchestrator] Work plan for: [brief task summary]
 
 Tasks:
-1. [Subtask A] → [specialist] 
-2. [Subtask B] → [specialist] (depends on 1)
-3. [Subtask C] → [specialist] (parallel with 2)
+1. [Subtask A] → [specialist] [T1]
+2. [Subtask B] → [specialist] [T2] (depends on 1)
+3. [Subtask C] → [specialist] [T2] (parallel with 2)
 
 Tasks 1 and 3 will run in parallel. Task 2 starts after Task 1 completes.
+T1 = research/analysis (no confirmation needed). T2 = artifact written to disk (confirm before writing). T3 = command/infrastructure (explicit sign-off per action).
 
-Confirm to proceed? Any tasks involving file writes or commands will require specialist confirmation before execution.
+Confirm to proceed?
 ```
 
 Wait for user confirmation before dispatching.
@@ -163,22 +164,60 @@ Agent type names match the specialist names in the routing table above:
 `product-manager`, `project-manager`, `ux-researcher`, `data-analyst`,
 `seo-manager`, `document-writer`, `technical-business-analyst`
 
+### Context Envelope
+
+Structure every dispatch prompt with these five fields. Omitting CONTEXT is the most common cause of low-confidence or blocked responses.
+
+```
+TASK: [One sentence — what the specialist must produce]
+CONTEXT: [Relevant facts — prior decisions, existing code or docs, confirmed constraints]
+CONSTRAINTS: [What to avoid, scope limits, decisions not to revisit]
+OUTPUT FORMAT: [How to structure the response]
+CONFIDENCE SIGNAL: End your response with — CONFIDENCE: [High|Medium|Low] — [one-line reason]
+```
+
+If the specialist cannot proceed, it returns `BLOCKED: [reason] — [what would unblock it]` instead of a confidence signal. See Fallback and Escalation for handling.
+
 ---
 
 ## Phase 5 — Synthesise
 
-After all agents complete, produce a unified summary:
+After all agents complete, check each response's confidence signal before including it in synthesis:
+
+| Signal | Action |
+|---|---|
+| `CONFIDENCE: High` | Include directly in synthesis |
+| `CONFIDENCE: Medium` | Include with a flagged caveat; ask user to confirm the stated assumption before acting on T2/T3 tasks |
+| `CONFIDENCE: Low` | Do not include; surface the gap to the user; re-dispatch with enriched context or a different specialist |
+| No signal | Treat as `Medium` |
+| `BLOCKED: [reason]` | See Fallback and Escalation — blocked-state protocol |
+
+Then produce a unified summary:
 
 ```
 [Orchestrator] Complete.
 
 What was done:
-- [Agent A]: [what they produced / files changed]
-- [Agent B]: [what they produced / files changed]
+- [Agent A] [CONFIDENCE: High]: [what they produced / files changed]
+- [Agent B] [CONFIDENCE: Medium — assumed X]: [what they produced; confirm X before applying]
 
 Follow-up needed:
-- [Any open questions or next steps]
+- [Any open questions, unresolved blocks, or next steps]
 ```
+
+---
+
+## Trust Tier Model
+
+Every task in a work plan has a trust tier. Declare it in Phase 3 next to the specialist assignment.
+
+| Tier | Output type | Required before acting |
+|---|---|---|
+| **T1 — Research** | Analysis, recommendations, reviews, explanations | No confirmation needed; use directly in synthesis |
+| **T2 — Artifact** | Documents, code, configuration files written to disk | Show output to user; get confirmation before writing files |
+| **T3 — Execution** | Commands, infrastructure changes, deployments, destructive actions | Explicit per-action user sign-off before running |
+
+When a task produces both T1 and T2 output (e.g. a design recommendation + code), classify it as the higher tier (T2).
 
 ---
 
@@ -216,6 +255,7 @@ Not every request maps cleanly to a specialist. Use this decision tree:
 | No specialist fits the task at all | Handle it directly as the orchestrator; state that no specialist applies and explain why |
 | A dispatched specialist signals it is out of scope | Re-read the disambiguation table, pick the next-best specialist, and re-dispatch with a more focused prompt |
 | Specialist returns partial output or asks for missing context | Pause synthesis, surface the gap to the user, then re-dispatch with the missing information |
+| Specialist returns `BLOCKED: [reason] — [what would unblock]` | If missing info is already in context: re-dispatch with it explicitly included. If it requires user input: pause and ask. If out of scope for all specialists: handle directly as orchestrator |
 | Two specialists produce conflicting recommendations | Dispatch `senior-engineer` with both outputs and ask for a tie-break |
 | User rejects the work plan | Ask one clarifying question, revise the plan, and re-announce before dispatching |
 

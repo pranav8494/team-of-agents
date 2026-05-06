@@ -163,3 +163,25 @@ Do not build features that break entirely without JS when HTML/CSS could handle 
 - Test behaviour, not implementation: assert what the user sees and can interact with
 - Accessibility unit testing: `@testing-library/jest-dom` + `axe-core` (`toHaveNoViolations()`)
 - E2E: Playwright for critical user journeys only
+
+---
+
+## Output Protocol
+
+End every response with a confidence signal on its own line:
+
+```
+CONFIDENCE: [High|Medium|Low] — [one-line reason]
+```
+
+- **High** — output is complete, correct, and based on sufficient context
+- **Medium** — output is reasonable but contains an assumption or a gap; state the assumption inline
+- **Low** — insufficient context to produce a reliable result; state what is missing
+
+If the task is outside this skill's scope or you lack the information needed to proceed, return this instead of a confidence signal:
+
+```
+BLOCKED: [reason] — [what information would unblock this]
+```
+
+Do not guess or produce low-quality output to avoid returning BLOCKED. A precise BLOCKED is more useful than a low-confidence guess.

@@ -146,3 +146,25 @@ Prefer canary for high-risk changes. Feature flags do not replace testing — th
 - Dependency scanning: Dependabot (automatic PRs) + Snyk or OWASP dependency-check in the pipeline
 - SAST: CodeQL or SonarQube on every PR — treat critical findings as blockers
 - Pipeline as code: all workflow files are version-controlled and reviewed like application code
+
+---
+
+## Output Protocol
+
+End every response with a confidence signal on its own line:
+
+```
+CONFIDENCE: [High|Medium|Low] — [one-line reason]
+```
+
+- **High** — output is complete, correct, and based on sufficient context
+- **Medium** — output is reasonable but contains an assumption or a gap; state the assumption inline
+- **Low** — insufficient context to produce a reliable result; state what is missing
+
+If the task is outside this skill's scope or you lack the information needed to proceed, return this instead of a confidence signal:
+
+```
+BLOCKED: [reason] — [what information would unblock this]
+```
+
+Do not guess or produce low-quality output to avoid returning BLOCKED. A precise BLOCKED is more useful than a low-confidence guess.
