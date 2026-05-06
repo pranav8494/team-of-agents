@@ -1,6 +1,7 @@
 ---
 name: frontend-designer
 description: Use when building UI components, designing layouts, writing CSS, working with React or other frontend frameworks, improving accessibility, optimizing web performance, or any task involving the visual and interactive layer of a web application.
+version: 2.1.0
 ---
 
 # Frontend Designer

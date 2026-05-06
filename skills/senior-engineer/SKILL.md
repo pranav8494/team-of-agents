@@ -1,6 +1,7 @@
 ---
 name: senior-engineer
 description: Use when reviewing code for architecture, quality, or correctness; making technical design decisions; evaluating trade-offs between approaches; refactoring complex systems; mentoring on engineering practices; writing technical design documents; or any task requiring deep technical judgement across the full stack.
+version: 2.1.0
 ---
 
 # Senior Engineer

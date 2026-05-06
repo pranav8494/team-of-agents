@@ -1,6 +1,7 @@
 ---
 name: technical-business-analyst
 description: Use when documenting project scope, writing implementation plans, capturing requirements, translating business goals into technical specifications, or producing any artefact that bridges stakeholder intent and engineering execution. Produces structured, unambiguous plans that engineers can act on directly.
+version: 2.1.0
 ---
 
 # Technical Business Analyst

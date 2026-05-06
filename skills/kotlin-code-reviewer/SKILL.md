@@ -1,6 +1,7 @@
 ---
 name: kotlin-reviewer
 description: Use when reviewing a Kotlin/Spring Boot pull request — systematic checklist covering architecture, idioms, testing, security, and observability
+version: 2.1.0
 ---
 
 # Kotlin Code Reviewer Skill

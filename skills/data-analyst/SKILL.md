@@ -1,6 +1,7 @@
 ---
 name: data-analyst
 description: Use when analysing data files (CSV, JSON, Excel), writing SQL queries, identifying trends and patterns, building dashboards or charts, summarising metrics, validating data quality, or turning raw data into actionable insights for decision-making.
+version: 2.1.0
 ---
 
 # Data Analyst

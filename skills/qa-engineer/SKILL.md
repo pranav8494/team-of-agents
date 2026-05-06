@@ -1,6 +1,7 @@
 ---
 name: qa-engineer
 description: Use when writing test plans, designing test cases, identifying edge cases and failure scenarios, reviewing code for testability, setting up test automation, evaluating test coverage, performing exploratory testing, defining quality standards, or any task focused on ensuring software works correctly and reliably before and after release.
+version: 2.1.0
 ---
 
 # QA Engineer

@@ -1,6 +1,7 @@
 ---
 name: ux-researcher
 description: Use when conducting user research, creating personas or journey maps, planning usability testing, synthesising user feedback, evaluating information architecture, analysing user behaviour, or any task that requires understanding what users need, think, or feel.
+version: 2.1.0
 ---
 
 # UX Researcher

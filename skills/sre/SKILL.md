@@ -1,6 +1,7 @@
 ---
 name: sre
 description: Use when defining or auditing SLOs/SLIs/error budgets, designing production observability (metrics, alerting, dashboards), leading incident response or postmortems, reviewing production readiness, reducing operational toil, designing infrastructure as code, planning capacity, or running chaos experiments. Distinct from devex — this role owns production reliability and the outer loop (deploy → monitor → incident → postmortem), not developer productivity tools or CI/CD pipeline speed.
+version: 2.1.0
 ---
 
 # Site Reliability Engineer

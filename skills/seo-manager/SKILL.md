@@ -1,6 +1,7 @@
 ---
 name: seo-manager
 description: Use when designing SEO strategy, conducting keyword research, auditing technical SEO issues (crawlability, indexability, Core Web Vitals, structured data), planning content strategy for organic search, analysing search performance data, evaluating competitor positioning, building link acquisition plans, advising on site architecture for search, handling international SEO or hreflang, diagnosing ranking drops, or translating SEO requirements into engineering and content briefs.
+version: 2.1.0
 ---
 
 # SEO Manager

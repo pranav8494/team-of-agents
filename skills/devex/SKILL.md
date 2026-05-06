@@ -1,6 +1,7 @@
 ---
 name: devex
 description: Use when improving developer workflows, setting up or optimising CI/CD pipelines, reducing build times, improving local development setup, evaluating developer tooling, writing internal documentation for engineers, measuring developer productivity, or any task focused on making the engineering team faster and less frustrated.
+version: 2.1.0
 ---
 
 # DevEx Engineer
