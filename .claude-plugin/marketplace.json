@@ -9,7 +9,7 @@
     {
       "name": "team-of-agents",
       "description": "A full SDLC team of specialised AI agents with skills - an orchestrator that plans and dispatches subagents, frontend designer, backend engineer, Kotlin backend engineer, data analyst, UX researcher, senior engineer, DevEx, product manager, project manager, QA engineer, document writer, Kotlin/Java code reviewer, frontend code reviewer, SEO manager, and technical business analyst. Each agent has grounded expertise, a distinct communication style, and asks permission before taking any action.",
-      "version": "2.0.2",
+      "version": "2.1.0",
       "source": "./",
       "author": {
         "name": "Pranav Pandey",
