@@ -51,30 +51,47 @@ Every skill must follow this template:
 ---
 name: your-role-name
 description: "Use when [specific trigger condition]. One sentence, be specific."
+version: 2.1.0
 ---
 
 # Role Title
 
-## Who You Are
-[Persona — seniority, years of experience, core identity, what they optimise for]
+## Iron Law
 
-## Your Expertise
-[Technical skills, tools, frameworks — all grounded in your research]
+[2-3 non-negotiable principles that govern every task this skill handles]
 
-## How You Think
-[Mental models, decision-making approach, priorities, known biases to counteract]
-
-## How You Communicate
-[Tone, output format, how they interact with other roles on the team]
+---
 
 ## Before Taking Any Action
-Always:
-1. State what you want to do and why
-2. Ask for user confirmation before writing/editing files, running commands, or making web requests
-3. Report what was done after completing
 
-## Your Workflow
-[Step-by-step approach to a typical task in this role]
+1. Announce what you intend to produce and why
+2. Confirm scope with the user
+3. Ask for confirmation before writing files, running commands, or accessing external resources
+4. Report what was produced when complete
+
+---
+
+## Task Approach
+
+| User asks for | What to produce |
+|---|---|
+| [Task type] | [Concrete output description] |
+
+---
+
+## [Role-Specific Knowledge Sections]
+
+[Decision tables, named frameworks, checklists grounded in real practice]
+
+---
+
+## Output Protocol
+
+End every response with:
+CONFIDENCE: [High|Medium|Low] — [one-line reason]
+
+If out of scope or missing context:
+BLOCKED: [reason] — [what would unblock this]
 ```
 
 ### 3. Create the agent definition (subagent for orchestrator dispatch)
@@ -83,12 +100,12 @@ Always:
 touch agents/your-role-name.md
 ```
 
-Agent definitions are condensed system prompts used when the orchestrator dispatches this specialist as a subagent. They are shorter than skills and optimised for focused, isolated execution:
+Agent definitions are condensed system prompts used when the orchestrator dispatches this specialist as a subagent. They share the same Iron Law and Task Approach table as the corresponding skill, but are shorter and optimised for focused, isolated execution:
 
 ```markdown
 ---
 name: your-role-name
-description: "[Specialist type]. Invoke for [specific tasks]. Returns [output format]."
+description: "[One-line description of what this agent handles. Returns X.]"
 model: inherit
 tools: Read, Write, Edit, Bash, Glob, Grep
 disallowedTools: Agent
@@ -96,16 +113,32 @@ disallowedTools: Agent
 
 # Role Title
 
-[2-3 sentence persona. Core expertise areas. Philosophy in one sentence.]
+## Iron Law
+
+[Same Iron Law as the skill]
+
+## Task Approach
+
+| User asks for | What to produce |
+|---|---|
+| [Task type] | [Concrete output description] |
 
 ## Expertise
-[Bullet list of specific skills, tools, frameworks]
 
-## How You Work
-[5-7 numbered steps — concise workflow for this role's core tasks]
+- [Key domain knowledge, tools, frameworks]
 
 ## Output Format
-[What the agent returns: implementation, analysis, structured artefact, etc.]
+
+- For implementation: working code with inline comments on non-obvious decisions
+- For design: concise proposal with trade-off notes
+- For analysis: structured findings with specific, actionable recommendations
+- For review: per-item feedback with severity label; overall verdict
+
+End every response with:
+CONFIDENCE: [High|Medium|Low] — [one-line reason]
+
+If out of scope or missing context:
+BLOCKED: [reason] — [what would unblock this]
 ```
 
 **Important:** Always include `disallowedTools: Agent` — subagents cannot spawn further agents.
@@ -117,10 +150,12 @@ Add the new role to `skills/orchestrator/SKILL.md` in the appropriate category (
 ### 5. Test your skill
 
 Invoke your skill directly in Claude Code:
-- [ ] The agent adopts the correct persona and expertise
+- [ ] The Iron Law is present and contains 2-3 non-negotiable principles
+- [ ] The Task Approach table is present and covers the role's core task types
+- [ ] The Output Protocol is present and emits a CONFIDENCE or BLOCKED signal at the end of every response
 - [ ] It announces intended actions before taking them
 - [ ] It asks for confirmation before writing files or running commands
-- [ ] The expertise listed matches what the role actually does in practice
+- [ ] Role-specific knowledge sections (decision tables, checklists) are grounded in real practice
 
 Test via the orchestrator:
 - [ ] The orchestrator correctly routes tasks to your new role
