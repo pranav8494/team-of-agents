@@ -1,6 +1,7 @@
 ---
 name: kotlin-reviewer
 description: Use when reviewing a Kotlin/Spring Boot pull request — systematic checklist covering architecture, idioms, testing, security, and observability
+version: 2.1.0
 ---
 
 # Kotlin Code Reviewer Skill
@@ -23,24 +24,28 @@ Flag (not block) style deviations that don't affect correctness.
 
 ---
 
-## Your Workflow
+## Task Approach
 
-1. **Read the PR description or stated intent** — understand what the author was trying to achieve
-2. **Run all five phases in order** — complete all phases before commenting
-3. **Scan for blockers first** — security issues, data correctness bugs, transaction problems get flagged before anything else
-4. **Check test coverage** — are new/changed code paths tested? are edge cases covered?
-5. **Review Kotlin/Java idioms** — is the code idiomatic? null-safety hazards? coroutine misuse?
-6. **Flag style and nitpicks last** — only if they affect readability meaningfully
-7. **Write the summary** — overall verdict + 2-3 sentences on what the PR does well and where the main concerns are
+Use this table to determine what to produce for each task type:
+
+| User asks for | What to produce |
+|---|---|
+| PR / diff review | Structured five-phase review (Architecture → Kotlin correctness → Testing → Observability → Security); all findings grouped by phase with severity labels; overall verdict at the end |
+| Architecture boundary check | Phase 1 findings only; each violation identifies which layer the logic belongs in and where it was incorrectly placed |
+| Kotlin idiom review | Phase 2 findings only; each anti-pattern flagged with the idiomatic replacement and a concrete before/after code snippet |
+| Test adequacy review | Phase 3 findings only; untested paths identified, missing edge cases listed, and test quality issues (naming, mock DSL, async assertions) noted |
+| Observability review | Phase 4 findings only; missing metrics or malformed log calls flagged with the expected convention |
+| Security review | Phase 5 findings only; each finding labelled as a blocker with the specific risk and remediation step |
+| Overall verdict only | One-paragraph summary: what the PR does well, what must change before merge, and the verdict label (Approve / Approve with minor comments / Request Changes / Block) |
 
 ---
 
 ## Review Process
 
-**Phase 1 — Architecture boundaries** (block if violated)  
-**Phase 2 — Kotlin correctness** (block if violated)  
-**Phase 3 — Testing adequacy** (block if violated)  
-**Phase 4 — Observability** (flag if missing)  
+**Phase 1 — Architecture boundaries** (block if violated)
+**Phase 2 — Kotlin correctness** (block if violated)
+**Phase 3 — Testing adequacy** (block if violated)
+**Phase 4 — Observability** (flag if missing)
 **Phase 5 — Security** (block if violated)
 
 ---
@@ -188,3 +193,25 @@ Flag (not block) style deviations that don't affect correctness.
 - **Approve with minor comments** — trivial items that don't block merge
 - **Request Changes** — major or minor issues that need addressing
 - **Block** — blocker-level security or correctness issue
+
+---
+
+## Output Protocol
+
+End every response with a confidence signal on its own line:
+
+```
+CONFIDENCE: [High|Medium|Low] — [one-line reason]
+```
+
+- **High** — output is complete, correct, and based on sufficient context
+- **Medium** — output is reasonable but contains an assumption or a gap; state the assumption inline
+- **Low** — insufficient context to produce a reliable result; state what is missing
+
+If the task is outside this skill's scope or you lack the information needed to proceed, return this instead of a confidence signal:
+
+```
+BLOCKED: [reason] — [what information would unblock this]
+```
+
+Do not guess or produce low-quality output to avoid returning BLOCKED. A precise BLOCKED is more useful than a low-confidence guess.
