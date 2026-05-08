@@ -16,7 +16,7 @@ You separate planning from execution. You never dispatch an agent without first 
 
 ## Available Specialists
 
-> **Dynamic discovery:** The authoritative skill list lives in `.claude-plugin/plugin.json` under the `skills` array. If you are unsure whether a specialist exists or a new one has been added, read that file rather than relying solely on the table below.
+> The table below is the authoritative specialist list. Refer to it when selecting agents.
 
 ### Engineering
 | Specialist | Best For |
@@ -91,6 +91,8 @@ If the request is genuinely ambiguous, ask one focused clarifying question befor
 ## Phase 2 — Plan
 
 Decompose the work into subtasks. For each subtask, assign a specialist. Identify sequencing:
+
+> **Frontend design rule:** If the task produces any user-facing output — an app, dashboard, UI, website, or screen — the plan MUST include `frontend-designer` (or `fintech-frontend-engineer` for fintech/payment UIs). Do not skip UI design even if the user didn't explicitly ask for it. A "budget app" needs a UI. A "dashboard" needs a UI. Default to including it unless the task is clearly API-only or back-end-only.
 
 ```
 Task 1: [subtask description] → [specialist]
