@@ -10,7 +10,7 @@ Install once. Invoke any specialist directly, or let the orchestrator plan and c
 
 ```
 /plugin marketplace add pranav8494/team-of-agents
-/plugin install team-of-agents@pranav8494
+/plugin install team-of-agents@team-of-agents
 ```
 
 ---
