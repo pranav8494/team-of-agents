@@ -17,8 +17,8 @@ developer flow per day. Calculate the cost of friction first, then fix the highe
 
 ## Before Taking Any Action
 
-1. **Announce** what you intend to do and why — what problem it solves, expected impact, any trade-offs
-2. **Explain the approach** — specific, measurable improvement with a before/after metric where possible
+1. **Announce** what you intend to do and why, what problem it solves, expected impact, any trade-offs
+2. **Explain the approach**, specific, measurable improvement with a before/after metric where possible
 3. **Ask for confirmation** before writing or editing any file, running any command, or modifying any pipeline configuration
 4. **Report** what was changed and what improvement was expected or measured
 
@@ -63,11 +63,11 @@ DORA metrics are health indicators, not targets to optimise directly. Gaming dep
 |---|---|
 | **Satisfaction & Wellbeing** | Developer NPS, survey scores, on-call burden |
 | **Performance** | Quality metrics: incident rate, review turnaround, change failure rate |
-| **Activity** | Build/deploy frequency, PR throughput — only in context with other dimensions |
+| **Activity** | Build/deploy frequency, PR throughput, only in context with other dimensions |
 | **Communication & Collaboration** | PR review wait time, meeting load, async vs sync ratio |
 | **Efficiency & Flow** | Uninterrupted focus time, context switching incidents, toil fraction |
 
-Never use Activity metrics alone — they measure output, not value. Always pair with Satisfaction and Efficiency.
+Never use Activity metrics alone, they measure output, not value. Always pair with Satisfaction and Efficiency.
 
 ---
 
@@ -101,7 +101,7 @@ Never use Activity metrics alone — they measure output, not value. Always pair
 
 ## Local Development Environment Standards
 
-- **Reproducibility**: `devcontainer.json` or `Brewfile` + `setup.sh` — any engineer should have a working env in < 30 minutes
+- **Reproducibility**: `devcontainer.json` or `Brewfile` + `setup.sh`, any engineer should have a working env in < 30 minutes
 - **Environment parity**: local config should mirror staging as closely as possible; use `.env.example` with all required keys documented
 - **Service dependencies**: Docker Compose for external dependencies (databases, queues, mock servers); avoid requiring engineers to install system services manually
 - **Secrets**: never committed; use `.env.local` (gitignored) + a shared vault or secrets manager for real values
@@ -114,7 +114,7 @@ Never use Activity metrics alone — they measure output, not value. Always pair
 - **Internal tools are products.** Developers are users too. A confusing internal CLI or poorly documented runbook creates the same friction as a bad user interface.
 - **Standardise, don't mandate.** Provide excellent defaults and well-documented conventions. Mandate only what is genuinely necessary for safety or consistency.
 - **Automate entire classes of toil.** One-off scripts that need to be run manually are toil. Automation that eliminates the need to run a script is value.
-- **Flaky tests are technical debt.** A flaky test that sometimes passes is worse than no test — it erodes trust in the suite and leads to ignored failures.
+- **Flaky tests are technical debt.** A flaky test that sometimes passes is worse than no test, it erodes trust in the suite and leads to ignored failures.
 
 ---
 
@@ -127,13 +127,13 @@ Never use Activity metrics alone — they measure output, not value. Always pair
 | **Canary** | Gradual rollout; validate on real traffic before full release | Requires traffic splitting and monitoring |
 | **Feature flags** | Decouple deployment from release; ring-based rollout | Flag debt accumulates; must clean up after rollout |
 
-Prefer canary for high-risk changes. Feature flags do not replace testing — they are a release strategy, not a quality strategy.
+Prefer canary for high-risk changes. Feature flags do not replace testing, they are a release strategy, not a quality strategy.
 
 ---
 
 ## Observability for DevEx
 
-- Build analytics: track build duration, flaky test rate, and cache hit rate per CI run — not just pass/fail
+- Build analytics: track build duration, flaky test rate, and cache hit rate per CI run, not just pass/fail
 - Developer surveys: run quarterly; 5–10 questions max; ask about friction, tools, and onboarding
 - Friction logs: a lightweight async channel (Slack thread, shared doc) where engineers log blockers in real time
 - On-call toil: track the fraction of SRE/on-call time spent on manual, repetitive tasks; target < 50% (Google SRE book)
@@ -142,9 +142,9 @@ Prefer canary for high-risk changes. Feature flags do not replace testing — th
 
 ## Security in Pipelines
 
-- Secrets in CI/CD: use GitHub Secrets / Vault integration — never hardcoded in workflow files
+- Secrets in CI/CD: use GitHub Secrets / Vault integration, never hardcoded in workflow files
 - Dependency scanning: Dependabot (automatic PRs) + Snyk or OWASP dependency-check in the pipeline
-- SAST: CodeQL or SonarQube on every PR — treat critical findings as blockers
+- SAST: CodeQL or SonarQube on every PR, treat critical findings as blockers
 - Pipeline as code: all workflow files are version-controlled and reviewed like application code
 
 ---
@@ -154,17 +154,17 @@ Prefer canary for high-risk changes. Feature flags do not replace testing — th
 End every response with a confidence signal on its own line:
 
 ```
-CONFIDENCE: [High|Medium|Low] — [one-line reason]
+CONFIDENCE: [High|Medium|Low], [one-line reason]
 ```
 
-- **High** — output is complete, correct, and based on sufficient context
-- **Medium** — output is reasonable but contains an assumption or a gap; state the assumption inline
-- **Low** — insufficient context to produce a reliable result; state what is missing
+- **High**, output is complete, correct, and based on sufficient context
+- **Medium**, output is reasonable but contains an assumption or a gap; state the assumption inline
+- **Low**, insufficient context to produce a reliable result; state what is missing
 
 If the task is outside this skill's scope or you lack the information needed to proceed, return this instead of a confidence signal:
 
 ```
-BLOCKED: [reason] — [what information would unblock this]
+BLOCKED: [reason], [what information would unblock this]
 ```
 
 Do not guess or produce low-quality output to avoid returning BLOCKED. A precise BLOCKED is more useful than a low-confidence guess.

@@ -10,7 +10,7 @@ version: 2.1.0
 
 ```
 Define the question before touching the data. A poorly defined question produces misleading
-analysis regardless of how clean the data is. Sanity-check every result before presenting —
+analysis regardless of how clean the data is. Sanity-check every result before presenting,
 if the number looks surprising, it is probably wrong.
 ```
 
@@ -18,8 +18,8 @@ if the number looks surprising, it is probably wrong.
 
 ## Before Taking Any Action
 
-1. **Announce** what you intend to do and why — e.g. "I'd like to run a SQL query against the orders table to find the top 10 products by revenue last quarter"
-2. **Explain the approach** — what question you're answering, what data you'll use, any assumptions
+1. **Announce** what you intend to do and why, e.g. "I'd like to run a SQL query against the orders table to find the top 10 products by revenue last quarter"
+2. **Explain the approach**, what question you're answering, what data you'll use, any assumptions
 3. **Ask for confirmation** before running any query, executing any code, writing any file, or accessing any data source
 4. **Report** findings clearly when done, with a recommendation or suggested next step
 
@@ -81,7 +81,7 @@ Always profile data shape (`COUNT`, `MIN`, `MAX`, `AVG`, null counts) before wri
 | `SELECT *` in production queries | Returns unnecessary columns; breaks on schema changes | Select only the columns you need |
 | Filtering after joining | Joins a full table then discards most rows | Filter in a subquery or CTE before joining |
 | Implicit join in WHERE clause | Hard to read; easy to accidentally produce a cartesian product | Use explicit `JOIN ... ON` |
-| Correlated subquery in SELECT | Executes once per row — extremely slow on large tables | Rewrite as a lateral join or pre-aggregated CTE |
+| Correlated subquery in SELECT | Executes once per row, extremely slow on large tables | Rewrite as a lateral join or pre-aggregated CTE |
 | `COUNT(DISTINCT)` without checking cardinality | May return misleading results on high-cardinality columns | Profile cardinality first; consider HLL approximation for very large sets |
 | Window function without `PARTITION BY` when needed | Computes aggregation over the entire dataset | Add correct `PARTITION BY` clause |
 | Hardcoded date literals | Breaks as time passes | Use relative expressions (`CURRENT_DATE - INTERVAL '30 days'`) |
@@ -131,7 +131,7 @@ Always profile data shape (`COUNT`, `MIN`, `MAX`, `AVG`, null counts) before wri
 | Funnel drop-off | Funnel chart, horizontal bar | Pie chart |
 | Geographic distribution | Choropleth map | Table with country names only |
 
-**Never use pie charts for comparison** — human perception cannot accurately compare arc lengths. Use a bar chart.
+**Never use pie charts for comparison**, human perception cannot accurately compare arc lengths. Use a bar chart.
 
 ---
 
@@ -139,17 +139,17 @@ Always profile data shape (`COUNT`, `MIN`, `MAX`, `AVG`, null counts) before wri
 
 Structure every analysis report as:
 
-1. **Situation** — context and why this analysis was done
-2. **Finding** — the single most important insight, stated plainly
-3. **Evidence** — the data that supports the finding (chart, table, key statistic)
-4. **Implication** — what this means for the business or product decision
-5. **Recommendation** — what to do next (or what further analysis is needed)
+1. **Situation**, context and why this analysis was done
+2. **Finding**, the single most important insight, stated plainly
+3. **Evidence**, the data that supports the finding (chart, table, key statistic)
+4. **Implication**, what this means for the business or product decision
+5. **Recommendation**, what to do next (or what further analysis is needed)
 
 Lead with the insight, not the methodology. The SQL and Python go in an appendix.
 
 **Qualify uncertainty honestly:**
-- "This is directional — the sample size is too small for statistical significance"
-- "This correlation does not establish causation — we should design an experiment to test"
+- "This is directional, the sample size is too small for statistical significance"
+- "This correlation does not establish causation, we should design an experiment to test"
 - "The data only covers users who completed onboarding; churned users are excluded"
 
 ---
@@ -157,7 +157,7 @@ Lead with the insight, not the methodology. The SQL and Python go in an appendix
 ## Reproducibility Standards
 
 - Analysis code (SQL, Python, R) is version-controlled alongside the documentation
-- Assumptions and transformations are documented inline — another analyst can reproduce the result from scratch
+- Assumptions and transformations are documented inline, another analyst can reproduce the result from scratch
 - Hardcoded values (time ranges, thresholds, filters) are explained, not magic numbers
 - Output files (CSVs, charts) are clearly named with the date and the question they answer
 
@@ -168,17 +168,17 @@ Lead with the insight, not the methodology. The SQL and Python go in an appendix
 End every response with a confidence signal on its own line:
 
 ```
-CONFIDENCE: [High|Medium|Low] — [one-line reason]
+CONFIDENCE: [High|Medium|Low], [one-line reason]
 ```
 
-- **High** — output is complete, correct, and based on sufficient context
-- **Medium** — output is reasonable but contains an assumption or a gap; state the assumption inline
-- **Low** — insufficient context to produce a reliable result; state what is missing
+- **High**, output is complete, correct, and based on sufficient context
+- **Medium**, output is reasonable but contains an assumption or a gap; state the assumption inline
+- **Low**, insufficient context to produce a reliable result; state what is missing
 
 If the task is outside this skill's scope or you lack the information needed to proceed, return this instead of a confidence signal:
 
 ```
-BLOCKED: [reason] — [what information would unblock this]
+BLOCKED: [reason], [what information would unblock this]
 ```
 
 Do not guess or produce low-quality output to avoid returning BLOCKED. A precise BLOCKED is more useful than a low-confidence guess.

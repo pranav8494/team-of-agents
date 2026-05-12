@@ -1,6 +1,6 @@
 ---
 name: sre
-description: Use when defining or auditing SLOs/SLIs/error budgets, designing production observability (metrics, alerting, dashboards), reviewing production readiness, reducing operational toil, writing runbooks or postmortems, designing infrastructure as code, or planning chaos experiments. Distinct from devex — this skill covers production reliability and the outer loop (deploy → monitor → incident → postmortem), not developer productivity tools or CI/CD pipeline speed.
+description: Use when defining or auditing SLOs/SLIs/error budgets, designing production observability (metrics, alerting, dashboards), reviewing production readiness, reducing operational toil, writing runbooks or postmortems, designing infrastructure as code, or planning chaos experiments. Distinct from devex, this skill covers production reliability and the outer loop (deploy → monitor → incident → postmortem), not developer productivity tools or CI/CD pipeline speed.
 version: 2.1.0
 ---
 
@@ -9,17 +9,17 @@ version: 2.1.0
 ## Iron Law
 
 ```
-70% of outages are caused by changes — make every change incremental, observable, and reversible.
-Alert on symptoms, not causes — every page that does not require immediate human action is a bug.
-MTTR beats MTBF — optimise for fast recovery, not for preventing all failures.
+70% of outages are caused by changes, make every change incremental, observable, and reversible.
+Alert on symptoms, not causes, every page that does not require immediate human action is a bug.
+MTTR beats MTBF, optimise for fast recovery, not for preventing all failures.
 ```
 
 ---
 
 ## Before Taking Any Action
 
-1. **Announce** what you intend to produce — SLO proposal, alert rules, runbook, IaC, postmortem, PRR report, chaos experiment design
-2. **Confirm scope** — which service, which environment, existing SLOs if any
+1. **Announce** what you intend to produce, SLO proposal, alert rules, runbook, IaC, postmortem, PRR report, chaos experiment design
+2. **Confirm scope**, which service, which environment, existing SLOs if any
 3. **Ask for confirmation** before writing files, running commands, or proposing infrastructure changes
 4. **Report** what was produced, what decisions were embedded, and what still needs human review (SLO targets need stakeholder sign-off; chaos experiments need a maintenance window)
 
@@ -51,7 +51,7 @@ Use this table to determine what to produce for each task type:
 |---|---|
 | **SLI** | A quantitative measure of service behaviour (e.g. % of requests with latency < 200ms) |
 | **SLO** | A target for the SLI over a time window (e.g. 99.9% of requests < 200ms over 30 days) |
-| **Error Budget** | `1 − SLO target` — the allowed failure rate (e.g. 0.1% of requests may fail the SLI) |
+| **Error Budget** | `1 − SLO target`, the allowed failure rate (e.g. 0.1% of requests may fail the SLI) |
 | **SLA** | An SLO with contractual consequences (penalties, credits) |
 
 ### SLI Selection by Service Type
@@ -63,7 +63,7 @@ Use this table to determine what to produce for each task type:
 | Storage | Durability (data loss rate); read latency p99; write availability |
 | Scheduled jobs | % of jobs completing within time budget; error rate |
 
-**Use percentiles (p99, p95), never averages.** An average hides the tail — users on p99 latency are real users having a bad experience.
+**Use percentiles (p99, p95), never averages.** An average hides the tail, users on p99 latency are real users having a bad experience.
 
 ### Error Budget Calculation
 
@@ -102,7 +102,7 @@ Alert on symptoms (p99 latency exceeds SLO threshold), not causes (CPU > 80%). C
 
 ## Alert Design Rules
 
-- **Every page requires immediate human action.** A page that does not is a bug — it trains engineers to ignore alerts.
+- **Every page requires immediate human action.** A page that does not is a bug, it trains engineers to ignore alerts.
 - **Alert on burn rate, not absolute values.** A 1-hour burn rate of 14.4× will exhaust a 30-day 99.9% budget in 5 days.
 - **Two-alert model per SLO:**
   - Fast burn: 6-hour window, 5% budget consumed → page immediately
@@ -125,7 +125,7 @@ Run before a service goes to production or receives on-call coverage:
 | **Change management** | Canary or blue/green configured; rollback tested and documented; deployment < 30 minutes |
 | **Performance targets** | SLOs defined, agreed with product team, and baselined against load test results |
 
-A service that fails PRR is not blocked from deployment — it is blocked from receiving on-call coverage. The engineering team retains on-call responsibility until PRR passes.
+A service that fails PRR is not blocked from deployment, it is blocked from receiving on-call coverage. The engineering team retains on-call responsibility until PRR passes.
 
 ---
 
@@ -148,7 +148,7 @@ A service that fails PRR is not blocked from deployment — it is blocked from r
 | HH:MM | [Alert fired / mitigation attempted / resolved] |
 
 ## Root Cause
-[Avoid "human error" as a root cause — it is always a system design issue.
+[Avoid "human error" as a root cause, it is always a system design issue.
 Describe the systemic conditions that allowed the incident to occur.]
 
 ## Contributing Factors
@@ -189,11 +189,11 @@ Describe the systemic conditions that allowed the incident to occur.]
 
 ## Infrastructure as Code Principles
 
-- All infrastructure changes are version-controlled, reviewed, and applied through CI/CD — never via console or SSH
+- All infrastructure changes are version-controlled, reviewed, and applied through CI/CD, never via console or SSH
 - Terraform: one state file per environment; remote state with locking (S3 + DynamoDB or Terraform Cloud)
 - Kubernetes: resource requests and limits on every container; `PodDisruptionBudget` for every stateful workload
 - Every infrastructure change has a rollback plan documented before it is applied to production
-- Secrets are never in Terraform state — use Vault or AWS Secrets Manager with references, not values
+- Secrets are never in Terraform state, use Vault or AWS Secrets Manager with references, not values
 
 ---
 
@@ -201,10 +201,10 @@ Describe the systemic conditions that allowed the incident to occur.]
 
 When designing a chaos experiment, always produce these four elements before any execution:
 
-1. **Hypothesis** — "The service will continue to serve requests at SLO if [failure condition]"
-2. **Blast radius** — scope to a test environment or a small percentage of traffic; define the kill switch
-3. **Measurement plan** — which SLIs to observe; what constitutes pass vs fail
-4. **Rollback trigger** — the condition at which the experiment is aborted immediately
+1. **Hypothesis**, "The service will continue to serve requests at SLO if [failure condition]"
+2. **Blast radius**, scope to a test environment or a small percentage of traffic; define the kill switch
+3. **Measurement plan**, which SLIs to observe; what constitutes pass vs fail
+4. **Rollback trigger**, the condition at which the experiment is aborted immediately
 
 Do not generate commands that inject failure into production without explicit user confirmation and a defined maintenance window.
 
@@ -215,17 +215,17 @@ Do not generate commands that inject failure into production without explicit us
 End every response with a confidence signal on its own line:
 
 ```
-CONFIDENCE: [High|Medium|Low] — [one-line reason]
+CONFIDENCE: [High|Medium|Low], [one-line reason]
 ```
 
-- **High** — output is complete, correct, and based on sufficient context
-- **Medium** — output is reasonable but contains an assumption or a gap; state the assumption inline
-- **Low** — insufficient context to produce a reliable result; state what is missing
+- **High**, output is complete, correct, and based on sufficient context
+- **Medium**, output is reasonable but contains an assumption or a gap; state the assumption inline
+- **Low**, insufficient context to produce a reliable result; state what is missing
 
 If the task is outside this skill's scope or you lack the information needed to proceed, return this instead of a confidence signal:
 
 ```
-BLOCKED: [reason] — [what information would unblock this]
+BLOCKED: [reason], [what information would unblock this]
 ```
 
 Do not guess or produce low-quality output to avoid returning BLOCKED. A precise BLOCKED is more useful than a low-confidence guess.

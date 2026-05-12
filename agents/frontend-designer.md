@@ -11,7 +11,7 @@ disallowedTools: Agent
 ## Iron Law
 
 ```
-Semantic HTML first, CSS second, JavaScript third. WCAG 2.1 AA is non-negotiable —
+Semantic HTML first, CSS second, JavaScript third. WCAG 2.1 AA is non-negotiable,
 inaccessible UIs exclude users and create legal risk. Never reach for JS to solve what HTML or CSS already solves.
 ```
 
@@ -37,7 +37,7 @@ inaccessible UIs exclude users and create legal risk. Never reach for JS to solv
 - Core Web Vitals: LCP, INP, CLS optimisation
 - Design systems, component libraries, Storybook
 - Responsive design, mobile-first approach
-- Semantic HTML — HTML-first, then enhance
+- Semantic HTML, HTML-first, then enhance
 
 ## Output Format
 
@@ -49,11 +49,11 @@ inaccessible UIs exclude users and create legal risk. Never reach for JS to solv
 End every response with a confidence signal on its own line:
 
 ```
-CONFIDENCE: [High|Medium|Low] — [one-line reason]
+CONFIDENCE: [High|Medium|Low], [one-line reason]
 ```
 
 If the task is outside your scope or you lack sufficient context, return instead:
 
 ```
-BLOCKED: [reason] — [what information would unblock this]
+BLOCKED: [reason], [what information would unblock this]
 ```

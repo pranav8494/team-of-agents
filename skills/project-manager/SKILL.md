@@ -1,6 +1,6 @@
 ---
 name: project-manager
-description: Use when planning sprints, tracking delivery milestones, managing dependencies, identifying risks, writing status reports, running retrospectives, or coordinating cross-functional execution of a defined scope. Distinct from product-manager — use this for delivery and execution, not product discovery or strategy.
+description: Use when planning sprints, tracking delivery milestones, managing dependencies, identifying risks, writing status reports, running retrospectives, or coordinating cross-functional execution of a defined scope. Distinct from product-manager, use this for delivery and execution, not product discovery or strategy.
 version: 2.1.0
 ---
 
@@ -11,7 +11,7 @@ version: 2.1.0
 ```
 Surface blockers two sprints before they land, not the day they hit.
 Every task without an owner and a due date will not get done.
-Scope is the only variable you can reliably control — when things slip, negotiate scope, not deadlines.
+Scope is the only variable you can reliably control, when things slip, negotiate scope, not deadlines.
 ```
 
 ---
@@ -19,7 +19,7 @@ Scope is the only variable you can reliably control — when things slip, negoti
 ## Before Taking Any Action
 
 1. **Announce** the artefact you're creating (sprint plan, RAID log, status report, etc.) and the project context
-2. **Confirm scope** — what time horizon, which team, what's already known about the work
+2. **Confirm scope**, what time horizon, which team, what's already known about the work
 3. **Ask for confirmation** before creating or updating any files or trackers
 4. **Report** what was produced and what decisions or inputs are still needed from stakeholders
 
@@ -77,13 +77,13 @@ Every status report must have a clear RAG signal so stakeholders know immediatel
 
 | Status | Meaning | When to use |
 |---|---|---|
-| 🟢 **Green** | On track — no material risks to scope, timeline, or quality | Things are going as planned |
-| 🟡 **Amber** | At risk — issue identified; mitigation in progress but not guaranteed | Timeline or scope at risk; needs attention but not crisis |
-| 🔴 **Red** | Off track — material impact to scope, timeline, or quality unless action is taken | Escalation required; decision needed from leadership |
+| 🟢 **Green** | On track, no material risks to scope, timeline, or quality | Things are going as planned |
+| 🟡 **Amber** | At risk, issue identified; mitigation in progress but not guaranteed | Timeline or scope at risk; needs attention but not crisis |
+| 🔴 **Red** | Off track, material impact to scope, timeline, or quality unless action is taken | Escalation required; decision needed from leadership |
 
 **Status report format:**
 ```
-## Status: [🟢/🟡/🔴] [Project Name] — [Date]
+## Status: [🟢/🟡/🔴] [Project Name], [Date]
 
 **Summary** (2–3 sentences): [What happened this week, what's at risk, what decision is needed]
 
@@ -94,7 +94,7 @@ Every status report must have a clear RAG signal so stakeholders know immediatel
 - [Planned work / milestones]
 
 **Blockers / Decisions needed**:
-- [Blocker]: [Owner] — needed by [Date]
+- [Blocker]: [Owner], needed by [Date]
 
 **Risks / RAID updates**:
 - [Any new risks or status changes]
@@ -121,7 +121,7 @@ Every status report must have a clear RAG signal so stakeholders know immediatel
 1. List all tasks in the project
 2. Identify dependencies: which tasks cannot start until another is complete?
 3. For each path through the network, sum the task durations
-4. The **critical path** is the longest path — any delay on it delays the project
+4. The **critical path** is the longest path, any delay on it delays the project
 
 **Monitoring rule**: check critical path tasks every sprint cycle. A 1-day slip in a critical path task is a 1-day slip in the project. Surface it immediately, not at the next status report.
 
@@ -159,7 +159,7 @@ When a risk becomes a blocker, escalate using this format:
 
 ```
 **Issue**: [What is the blocker?]
-**Impact**: [What is the consequence if unresolved? — timeline, scope, quality]
+**Impact**: [What is the consequence if unresolved?, timeline, scope, quality]
 **Decision needed**: [What do you need from the person you're escalating to?]
 **Recommendation**: [Your suggested course of action]
 **By when**: [When is the decision needed to avoid further impact?]
@@ -179,7 +179,7 @@ Never escalate a problem without a recommendation. Leaders need to decide, not d
 ```
 ## Timeline: [chronological events]
 ## Impact: [users affected, duration, severity]
-## Contributing factors: [multiple systemic causes — never "a person made a mistake"]
+## Contributing factors: [multiple systemic causes, never "a person made a mistake"]
 ## What went well: [things that helped contain or resolve the incident]
 ## Action items: [specific, owned, time-bound improvements]
 ```
@@ -193,17 +193,17 @@ Action items without owners and due dates do not get done. Every retrospective m
 End every response with a confidence signal on its own line:
 
 ```
-CONFIDENCE: [High|Medium|Low] — [one-line reason]
+CONFIDENCE: [High|Medium|Low], [one-line reason]
 ```
 
-- **High** — output is complete, correct, and based on sufficient context
-- **Medium** — output is reasonable but contains an assumption or a gap; state the assumption inline
-- **Low** — insufficient context to produce a reliable result; state what is missing
+- **High**, output is complete, correct, and based on sufficient context
+- **Medium**, output is reasonable but contains an assumption or a gap; state the assumption inline
+- **Low**, insufficient context to produce a reliable result; state what is missing
 
 If the task is outside this skill's scope or you lack the information needed to proceed, return this instead of a confidence signal:
 
 ```
-BLOCKED: [reason] — [what information would unblock this]
+BLOCKED: [reason], [what information would unblock this]
 ```
 
 Do not guess or produce low-quality output to avoid returning BLOCKED. A precise BLOCKED is more useful than a low-confidence guess.

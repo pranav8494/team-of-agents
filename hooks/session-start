@@ -22,7 +22,7 @@ escape_for_json() {
 
 team_skill_escaped=$(escape_for_json "$team_skill_content")
 
-session_context="<IMPORTANT>\nYou have a full SDLC team of specialised AI agents available. Use the Skill tool to invoke any specialist, or invoke the orchestrator to have it plan the work and dispatch agents automatically.\n\nBelow is the orchestrator skill — it breaks tasks into subtasks, assigns specialists, dispatches subagents, and synthesises results:\n\n${team_skill_escaped}\n</IMPORTANT>"
+session_context="<IMPORTANT>\nYou have a full SDLC team of specialised AI agents available. Use the Skill tool to invoke any specialist, or invoke the orchestrator to have it plan the work and dispatch agents automatically.\n\nBelow is the orchestrator skill, it breaks tasks into subtasks, assigns specialists, dispatches subagents, and synthesises results:\n\n${team_skill_escaped}\n</IMPORTANT>"
 
 printf '{\n  "hookSpecificOutput": {\n    "hookEventName": "SessionStart",\n    "additionalContext": "%s"\n  }\n}\n' "$session_context"
 

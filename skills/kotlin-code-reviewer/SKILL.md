@@ -1,6 +1,6 @@
 ---
 name: kotlin-reviewer
-description: Use when reviewing a Kotlin/Spring Boot pull request — systematic checklist covering architecture, idioms, testing, security, and observability
+description: Use when reviewing a Kotlin/Spring Boot pull request, systematic checklist covering architecture, idioms, testing, security, and observability
 version: 2.1.0
 ---
 
@@ -42,44 +42,44 @@ Use this table to determine what to produce for each task type:
 
 ## Review Process
 
-**Phase 1 — Architecture boundaries** (block if violated)
-**Phase 2 — Kotlin correctness** (block if violated)
-**Phase 3 — Testing adequacy** (block if violated)
-**Phase 4 — Observability** (flag if missing)
-**Phase 5 — Security** (block if violated)
+**Phase 1, Architecture boundaries** (block if violated)
+**Phase 2, Kotlin correctness** (block if violated)
+**Phase 3, Testing adequacy** (block if violated)
+**Phase 4, Observability** (flag if missing)
+**Phase 5, Security** (block if violated)
 
 ---
 
-## Phase 1 — Architecture Boundaries
+## Phase 1, Architecture Boundaries
 
 ### Controller
-- [ ] Zero business logic — only calls service, returns response
-- [ ] Primary constructor injection — no `@Autowired`, no field injection
+- [ ] Zero business logic, only calls service, returns response
+- [ ] Primary constructor injection, no `@Autowired`, no field injection
 - [ ] `@ResponseStatus(HttpStatus.NO_CONTENT)` on delete endpoints
 - [ ] Input validated with Bean Validation before reaching service layer
 
 ### Service
-- [ ] All external calls go through resilience executor — no direct client calls
+- [ ] All external calls go through resilience executor, no direct client calls
 - [ ] `@Cacheable` / `@CacheEvict` used for repeated reads of stable data
 - [ ] Concurrent I/O uses `async`/`awaitAll()`, not sequential calls
-- [ ] Fire-and-forget coroutines catch all exceptions and log — no silent failures
+- [ ] Fire-and-forget coroutines catch all exceptions and log, no silent failures
 - [ ] `@Transactional` scope does not span external API calls
 
 ### Adapter / Client
-- [ ] HTTP errors mapped to domain exceptions at adapter boundary — not in service or controller
+- [ ] HTTP errors mapped to domain exceptions at adapter boundary, not in service or controller
 - [ ] New HTTP clients have metrics instrumentation
 
 ### Repository
-- [ ] N+1 queries absent — fetch strategies reviewed; no unbounded queries without a covering index
+- [ ] N+1 queries absent, fetch strategies reviewed; no unbounded queries without a covering index
 - [ ] JPA mappings correct: lazy vs eager, cascade behaviour, orphan removal
 
 ### Mapper
-- [ ] Mappers are `object` with extension functions — not Spring beans
-- [ ] Missing data returns `null`, not throws — call sites use `mapNotNull`
+- [ ] Mappers are `object` with extension functions, not Spring beans
+- [ ] Missing data returns `null`, not throws, call sites use `mapNotNull`
 
 ### Exception
 - [ ] New exceptions extend the base HTTP exception class with correct `HttpStatus`
-- [ ] Sealed result types used for expected failure paths — exceptions reserved for unexpected conditions
+- [ ] Sealed result types used for expected failure paths, exceptions reserved for unexpected conditions
 
 ### Configuration
 - [ ] New config uses `@ConfigurationProperties` data class with constructor defaults
@@ -87,7 +87,7 @@ Use this table to determine what to produce for each task type:
 
 ---
 
-## Phase 2 — Kotlin Correctness
+## Phase 2, Kotlin Correctness
 
 ### Reject these patterns
 
@@ -109,19 +109,19 @@ Use this table to determine what to produce for each task type:
 - [ ] No `var` fields in `data class` unless mutation is genuinely required
 
 ### Coroutines
-- [ ] `suspend` functions do not block — no `Thread.sleep()`, no blocking I/O without `Dispatchers.IO`
-- [ ] Structured concurrency respected — no fire-and-forget without explicit scope and error handling
-- [ ] Cancellation handled — no `CancellationException` swallowed
+- [ ] `suspend` functions do not block, no `Thread.sleep()`, no blocking I/O without `Dispatchers.IO`
+- [ ] Structured concurrency respected, no fire-and-forget without explicit scope and error handling
+- [ ] Cancellation handled, no `CancellationException` swallowed
 
 ### Fintech domain
-- [ ] Currency values use `BigDecimal` — never `Double` or `Float`
-- [ ] Financial operations are idempotent — idempotency key present and enforced
-- [ ] Audit log entries are immutable — no updates, only appends
+- [ ] Currency values use `BigDecimal`, never `Double` or `Float`
+- [ ] Financial operations are idempotent, idempotency key present and enforced
+- [ ] Audit log entries are immutable, no updates, only appends
 - [ ] Transaction isolation level appropriate for the financial operation
 
 ---
 
-## Phase 3 — Testing Adequacy
+## Phase 3, Testing Adequacy
 
 ### Coverage (block if missing)
 - [ ] Every new public method has a test
@@ -131,21 +131,21 @@ Use this table to determine what to produce for each task type:
 
 ### Test quality
 - [ ] Test names use backtick strings: `` `action should result when condition` ``
-- [ ] Mockito-Kotlin DSL used: `whenever`, `verify` — no raw `Mockito.when()`
+- [ ] Mockito-Kotlin DSL used: `whenever`, `verify`, no raw `Mockito.when()`
 - [ ] `@MockitoBean` for Spring context mocks; `mock<T>()` for pure unit mocks
-- [ ] Async assertions use `verify(service, timeout(N))` — no `Thread.sleep()`
+- [ ] Async assertions use `verify(service, timeout(N))`, no `Thread.sleep()`
 - [ ] Coroutine tests use `runTest { }` from `kotlinx.coroutines.test`
 - [ ] Complex domain objects built via fixture factories, not inline
 
 ### Integration tests
 - [ ] Adapter tests use the project's abstract WireMock base class
-- [ ] `@AfterEach` resets WireMock state (inherited — not duplicated)
-- [ ] DB integration tests use Testcontainers (real PostgreSQL) — never mock the database
+- [ ] `@AfterEach` resets WireMock state (inherited, not duplicated)
+- [ ] DB integration tests use Testcontainers (real PostgreSQL), never mock the database
 - [ ] Flyway migrations reviewed: backward-compatible, forward-only, zero-downtime
 
 ---
 
-## Phase 4 — Observability
+## Phase 4, Observability
 
 ### Metrics (flag if missing)
 - [ ] New external calls have a counter or timer
@@ -161,38 +161,38 @@ Use this table to determine what to produce for each task type:
 
 ---
 
-## Phase 5 — Security
+## Phase 5, Security
 
 ### Block on any of
 - [ ] Hardcoded secrets, tokens, or credentials
 - [ ] Auth/permission checks bypassed or silently ignored
 - [ ] User input interpolated directly into search/DB queries (injection risk)
 - [ ] PII or tokens in log messages
-- [ ] Financial/cryptographic logic changed — flag for extra scrutiny even if it looks correct
+- [ ] Financial/cryptographic logic changed, flag for extra scrutiny even if it looks correct
 
 ---
 
 ## Commenting Guidelines
 
-**Severity labels — every comment must have one:**
-- `[blocker]` — must fix before merge (architecture violation, missing test, security issue)
-- `[major]` — should fix (significant idiom problem, missing observability)
-- `[minor]` — fix if easy (style that affects readability)
-- `[nit]` — optional style preference
-- `[question]` — seeking clarification before judging
-- `[nice]` — positive feedback on a well-written test, clean abstraction, or elegant Kotlin
+**Severity labels, every comment must have one:**
+- `[blocker]`, must fix before merge (architecture violation, missing test, security issue)
+- `[major]`, should fix (significant idiom problem, missing observability)
+- `[minor]`, fix if easy (style that affects readability)
+- `[nit]`, optional style preference
+- `[question]`, seeking clarification before judging
+- `[nice]`, positive feedback on a well-written test, clean abstraction, or elegant Kotlin
 
 **Format rules:**
 - Every comment explains: the problem, the risk, and a concrete suggestion or code example
 - Group comments by phase, not by file order
-- One clear comment per issue — don't scatter the same concern across multiple inline comments
-- Praise good work — clean abstractions and well-written tests earn a `[nice]`
+- One clear comment per issue, don't scatter the same concern across multiple inline comments
+- Praise good work, clean abstractions and well-written tests earn a `[nice]`
 
 **Overall verdict:**
-- **Approve** — no issues
-- **Approve with minor comments** — trivial items that don't block merge
-- **Request Changes** — major or minor issues that need addressing
-- **Block** — blocker-level security or correctness issue
+- **Approve**, no issues
+- **Approve with minor comments**, trivial items that don't block merge
+- **Request Changes**, major or minor issues that need addressing
+- **Block**, blocker-level security or correctness issue
 
 ---
 
@@ -201,17 +201,17 @@ Use this table to determine what to produce for each task type:
 End every response with a confidence signal on its own line:
 
 ```
-CONFIDENCE: [High|Medium|Low] — [one-line reason]
+CONFIDENCE: [High|Medium|Low], [one-line reason]
 ```
 
-- **High** — output is complete, correct, and based on sufficient context
-- **Medium** — output is reasonable but contains an assumption or a gap; state the assumption inline
-- **Low** — insufficient context to produce a reliable result; state what is missing
+- **High**, output is complete, correct, and based on sufficient context
+- **Medium**, output is reasonable but contains an assumption or a gap; state the assumption inline
+- **Low**, insufficient context to produce a reliable result; state what is missing
 
 If the task is outside this skill's scope or you lack the information needed to proceed, return this instead of a confidence signal:
 
 ```
-BLOCKED: [reason] — [what information would unblock this]
+BLOCKED: [reason], [what information would unblock this]
 ```
 
 Do not guess or produce low-quality output to avoid returning BLOCKED. A precise BLOCKED is more useful than a low-confidence guess.

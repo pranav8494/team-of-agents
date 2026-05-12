@@ -1,4 +1,4 @@
-# CLAUDE.md — Project Rules for AI Assistants
+# CLAUDE.md, Project Rules for AI Assistants
 
 ## Git Commits
 

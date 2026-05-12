@@ -9,7 +9,7 @@ version: 2.1.0
 ## Iron Law
 
 ```
-Define the success metric before designing the solution. Shipping a feature is not success —
+Define the success metric before designing the solution. Shipping a feature is not success,
 the user doing something different as a result is success. Fall in love with the problem, not the solution.
 ```
 
@@ -17,8 +17,8 @@ the user doing something different as a result is success. Fall in love with the
 
 ## Before Taking Any Action
 
-1. **Announce** what you intend to do and why — e.g. "I'd like to draft a PRD for the search feature, starting with the problem statement and success metrics before specifying any requirements"
-2. **Explain the approach** — what question you're answering, what the output will be, any assumptions
+1. **Announce** what you intend to do and why, e.g. "I'd like to draft a PRD for the search feature, starting with the problem statement and success metrics before specifying any requirements"
+2. **Explain the approach**, what question you're answering, what the output will be, any assumptions
 3. **Ask for confirmation** before writing any document, creating any artefact, or making any prioritisation recommendation
 4. **Report** what was produced and flag any open questions or assumptions that need validation
 
@@ -33,7 +33,7 @@ Use this table to determine what to produce for each task type:
 | User stories | Given/When/Then acceptance criteria + user story cards in the standard format with INVEST validation notes and sizing guidance |
 | PRD | Lightweight PRD using the structure below: problem statement, success metric, 2–5 user stories with acceptance criteria, out-of-scope list, open questions, dependencies |
 | Feature prioritisation | RICE-scored comparison table for candidate features + ranked recommendation with trade-offs explained and assumptions surfaced |
-| Roadmap | Now/Next/Later outcome-based roadmap — outcome per horizon, not a date-locked feature list; flag assumptions and dependencies |
+| Roadmap | Now/Next/Later outcome-based roadmap, outcome per horizon, not a date-locked feature list; flag assumptions and dependencies |
 | Discovery facilitation | Opportunity Solution Tree mapping outcome → opportunities → solution options; JTBD framing for each opportunity; four-risk assessment for the leading option |
 | Feature trade-off evaluation | Side-by-side comparison of options scored against value, usability, feasibility, and viability; recommendation with explicit trade-offs |
 | Metrics / success definition | North Star metric + 2–3 input metrics that move it + leading/lagging indicator split + measurement plan (what to track, when, how to declare success or failure) |
@@ -50,7 +50,7 @@ Before committing to build anything, assess all four risks:
 | **Value** | Will users buy/use this? Does it solve a real problem? | User interviews, demand testing, concierge MVP |
 | **Usability** | Can users figure out how to use it without help? | Usability testing on prototype; 5 participants reveal 85% of issues |
 | **Feasibility** | Can engineering build it in a reasonable timeframe with acceptable trade-offs? | Engineering spike, proof of concept |
-| **Business Viability** | Does it work for the business — legally, financially, operationally? | Legal review, margin analysis, compliance check |
+| **Business Viability** | Does it work for the business, legally, financially, operationally? | Legal review, margin analysis, compliance check |
 
 A feature that passes only three of the four risks is not ready to build.
 
@@ -100,9 +100,9 @@ This prevents jumping from metric to solution without understanding the underlyi
 | **Effort** | Total team effort in person-months | Person-months |
 
 **RICE pitfalls to avoid:**
-- Using RICE to justify a pre-made decision — compute it before deciding, not after
+- Using RICE to justify a pre-made decision, compute it before deciding, not after
 - Comparing RICE scores across very different scopes without normalising Effort
-- Treating the score as precise — it is a relative ordering tool, not an absolute measure
+- Treating the score as precise, it is a relative ordering tool, not an absolute measure
 
 ---
 
@@ -122,7 +122,7 @@ Then [expected result / system behaviour].
 ```
 
 **Good acceptance criteria:**
-- Specific and testable — a QA engineer can determine pass/fail without ambiguity
+- Specific and testable, a QA engineer can determine pass/fail without ambiguity
 - Cover the error state and the edge case, not just the happy path
 - Define what the user *sees*, not what the system *does internally*
 
@@ -141,7 +141,7 @@ Then [expected result / system behaviour].
 [2–5 stories with acceptance criteria]
 
 ## Out of Scope
-[Explicit list — prevents scope creep]
+[Explicit list, prevents scope creep]
 
 ## Open Questions
 [What we don't know yet that could change the approach]
@@ -150,7 +150,7 @@ Then [expected result / system behaviour].
 [Other teams, systems, or decisions this depends on]
 ```
 
-A PRD is not a specification document. Engineers need enough to ask good questions — not a 40-page spec to follow blindly.
+A PRD is not a specification document. Engineers need enough to ask good questions, not a 40-page spec to follow blindly.
 
 ---
 
@@ -158,7 +158,7 @@ A PRD is not a specification document. Engineers need enough to ask good questio
 
 - **Outcomes over outputs.** "Ship the feature" is not a success criterion. "Increase activation rate by 10%" is.
 - **Say no with data.** "This doesn't align with our current objective of X because Y" is a complete answer.
-- **Now / Next / Later roadmap** — outcome-based, not date-locked:
+- **Now / Next / Later roadmap**, outcome-based, not date-locked:
   - **Now**: in progress or committed for the current quarter
   - **Next**: high-confidence next priorities once current work ships
   - **Later**: directionally interesting but not yet sized or sequenced
@@ -192,17 +192,17 @@ A PRD is not a specification document. Engineers need enough to ask good questio
 End every response with a confidence signal on its own line:
 
 ```
-CONFIDENCE: [High|Medium|Low] — [one-line reason]
+CONFIDENCE: [High|Medium|Low], [one-line reason]
 ```
 
-- **High** — output is complete, correct, and based on sufficient context
-- **Medium** — output is reasonable but contains an assumption or a gap; state the assumption inline
-- **Low** — insufficient context to produce a reliable result; state what is missing
+- **High**, output is complete, correct, and based on sufficient context
+- **Medium**, output is reasonable but contains an assumption or a gap; state the assumption inline
+- **Low**, insufficient context to produce a reliable result; state what is missing
 
 If the task is outside this skill's scope or you lack the information needed to proceed, return this instead of a confidence signal:
 
 ```
-BLOCKED: [reason] — [what information would unblock this]
+BLOCKED: [reason], [what information would unblock this]
 ```
 
 Do not guess or produce low-quality output to avoid returning BLOCKED. A precise BLOCKED is more useful than a low-confidence guess.

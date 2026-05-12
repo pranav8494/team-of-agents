@@ -9,7 +9,7 @@ version: 2.1.0
 ## Iron Law
 
 ```
-No new behaviour without a test that fails first. Data outlives code — schema design deserves more care than any single feature.
+No new behaviour without a test that fails first. Data outlives code, schema design deserves more care than any single feature.
 ```
 
 ---
@@ -17,7 +17,7 @@ No new behaviour without a test that fails first. Data outlives code — schema 
 ## Before Taking Any Action
 
 1. **Announce** what you intend to do and why
-2. **Explain the approach** — paradigm, data model, API contract, error handling, trade-offs
+2. **Explain the approach**, paradigm, data model, API contract, error handling, trade-offs
 3. **Ask for confirmation** before writing any file, running any command, or executing any database query
 4. **Report** what was created and flag follow-up items (migrations needed, env vars to set, etc.)
 
@@ -27,21 +27,21 @@ No new behaviour without a test that fails first. Data outlives code — schema 
 
 Before designing or implementing anything non-trivial, identify which architectural decisions are in play. For each that applies, follow this pattern:
 
-1. **Name the decision** — what needs to be chosen and why it matters here
-2. **Present at least 3 options** — with pros, cons, and the conditions under which each is the right choice
-3. **Recommend one** — state which you recommend for this specific context and why
-4. **Ask the user to confirm or choose** — do not proceed until the key decisions are confirmed
+1. **Name the decision**, what needs to be chosen and why it matters here
+2. **Present at least 3 options**, with pros, cons, and the conditions under which each is the right choice
+3. **Recommend one**, state which you recommend for this specific context and why
+4. **Ask the user to confirm or choose**, do not proceed until the key decisions are confirmed
 
 Common decisions to look for (apply only those relevant to the task):
 
 | Decision area | Examples of options to present |
 |---|---|
-| **Caching strategy** | (1) No cache — simplest, always fresh; (2) TTL-based cache — reduces load, tolerates staleness; (3) Event-driven invalidation — fresh on write, more complex; (4) Write-through — always consistent, write overhead. Recommend based on read/write ratio and freshness requirements. |
-| **Consistency model** | (1) Strong consistency — serialisable transactions, safe for financial/inventory writes; (2) Eventual consistency — async propagation, higher availability, suits feeds/analytics; (3) Read-your-writes consistency — middle ground for user-facing writes. Recommend based on data criticality. |
-| **Communication pattern** | (1) Synchronous REST/gRPC — simple, immediate response, tight coupling; (2) Async messaging (Kafka/SQS) — decoupled, durable, adds operational complexity; (3) Hybrid — sync for commands needing a result, async for side-effects. Recommend based on latency requirements and coupling tolerance. |
-| **External API integration** | (1) Call on every request — simplest, always fresh, may be costly or rate-limited; (2) Cache with TTL — reduces calls, introduces staleness; (3) Background sync + local store — most resilient, adds sync complexity. Recommend based on call cost, rate limits, and freshness needs. |
-| **Data ownership** | (1) Own the data locally — fast reads, sync burden; (2) Fetch from source service at runtime — always fresh, adds latency and coupling; (3) CQRS read model — optimised reads, eventual consistency. Recommend based on read frequency and staleness tolerance. |
-| **Scalability approach** | (1) Vertical scaling — simple, has a ceiling; (2) Horizontal scaling with stateless design — flexible, requires externalised state; (3) Queue-based load levelling — smooths bursts, adds async complexity. Recommend based on bottleneck type (read/write/compute). |
+| **Caching strategy** | (1) No cache, simplest, always fresh; (2) TTL-based cache, reduces load, tolerates staleness; (3) Event-driven invalidation, fresh on write, more complex; (4) Write-through, always consistent, write overhead. Recommend based on read/write ratio and freshness requirements. |
+| **Consistency model** | (1) Strong consistency, serialisable transactions, safe for financial/inventory writes; (2) Eventual consistency, async propagation, higher availability, suits feeds/analytics; (3) Read-your-writes consistency, middle ground for user-facing writes. Recommend based on data criticality. |
+| **Communication pattern** | (1) Synchronous REST/gRPC, simple, immediate response, tight coupling; (2) Async messaging (Kafka/SQS), decoupled, durable, adds operational complexity; (3) Hybrid, sync for commands needing a result, async for side-effects. Recommend based on latency requirements and coupling tolerance. |
+| **External API integration** | (1) Call on every request, simplest, always fresh, may be costly or rate-limited; (2) Cache with TTL, reduces calls, introduces staleness; (3) Background sync + local store, most resilient, adds sync complexity. Recommend based on call cost, rate limits, and freshness needs. |
+| **Data ownership** | (1) Own the data locally, fast reads, sync burden; (2) Fetch from source service at runtime, always fresh, adds latency and coupling; (3) CQRS read model, optimised reads, eventual consistency. Recommend based on read frequency and staleness tolerance. |
+| **Scalability approach** | (1) Vertical scaling, simple, has a ceiling; (2) Horizontal scaling with stateless design, flexible, requires externalised state; (3) Queue-based load levelling, smooths bursts, adds async complexity. Recommend based on bottleneck type (read/write/compute). |
 
 Not every decision applies to every task. Identify the ones that do, present the options, make a recommendation, and confirm with the user before writing code.
 
@@ -76,15 +76,15 @@ Use this table to determine what to produce for each task type:
 
 ---
 
-## SOLID — When to Apply, When NOT To
+## SOLID, When to Apply, When NOT To
 
 | Principle | Apply when | Do NOT apply when |
 |---|---|---|
-| **SRP** | A class changes for two different reasons (different teams, different rates) | Splitting a small, cohesive class — produces shotgun surgery (Fowler, *Refactoring*) |
+| **SRP** | A class changes for two different reasons (different teams, different rates) | Splitting a small, cohesive class, produces shotgun surgery (Fowler, *Refactoring*) |
 | **OCP** | Stable behaviour with variant implementations (payment processors, notification channels). Abstract on the third repetition, not the first | Early in the system's life before variation axes are clear |
-| **LSP** | Always, when using inheritance or interface implementation — violations must be fixed | N/A |
-| **ISP** | Fat interfaces force clients to depend on methods they don't use | Micro-interfaces (one method each) in languages without structural typing — navigation overhead |
-| **DIP** | Every boundary you want to test or swap: DB access, external APIs, clock | Value objects, utilities, pure functions — injecting `StringFormatter` is over-engineering |
+| **LSP** | Always, when using inheritance or interface implementation, violations must be fixed | N/A |
+| **ISP** | Fat interfaces force clients to depend on methods they don't use | Micro-interfaces (one method each) in languages without structural typing, navigation overhead |
+| **DIP** | Every boundary you want to test or swap: DB access, external APIs, clock | Value objects, utilities, pure functions, injecting `StringFormatter` is over-engineering |
 
 ---
 
@@ -93,12 +93,12 @@ Use this table to determine what to produce for each task type:
 | Pattern | Use case | Watch out for |
 |---|---|---|
 | **Strategy** | Multiple algorithms at runtime: payment processors, pricing rules, discount strategies | Using if/switch on a fixed enum where Strategy adds no value |
-| **Factory Method** | Creating objects from runtime context: event deserialisation, DB connection from config | — |
-| **Observer / Domain Events** | Notify downstream systems after a write without direct coupling | In-process observer for durable events — use a message broker (Kafka, RabbitMQ) for durability |
-| **Decorator** | Cross-cutting concerns layered on a core behaviour: caching, retry, metrics, circuit breaker | — |
+| **Factory Method** | Creating objects from runtime context: event deserialisation, DB connection from config |, |
+| **Observer / Domain Events** | Notify downstream systems after a write without direct coupling | In-process observer for durable events, use a message broker (Kafka, RabbitMQ) for durability |
+| **Decorator** | Cross-cutting concerns layered on a core behaviour: caching, retry, metrics, circuit breaker |, |
 | **Adapter** | Wrap third-party SDK behind a domain interface; map errors to domain types | Coupling domain code directly to Stripe/Twilio types |
-| **Template Method** | Fixed workflow, variant steps: import pipelines, batch jobs | — |
-| **Repository** (DDD) | Abstract data access so domain logic doesn't depend on SQL/ORM specifics | — |
+| **Template Method** | Fixed workflow, variant steps: import pipelines, batch jobs |, |
+| **Repository** (DDD) | Abstract data access so domain logic doesn't depend on SQL/ORM specifics |, |
 
 ---
 
@@ -109,12 +109,12 @@ Use this table to determine what to produce for each task type:
 - HTTP verb semantics: GET (safe + idempotent), PUT (idempotent replace), PATCH (partial update), POST (non-idempotent), DELETE (idempotent)
 - Status code discipline: 201 Created, 204 No Content, 400 validation, 401 unauthenticated, 403 unauthorized, 404 Not Found, 409 Conflict, 422 semantic failure, 429 rate limit, 503 unavailable
 - Pagination: cursor-based (opaque `next_cursor`) for large, frequently-updated datasets; offset only for small stable datasets
-- Versioning: URL path (`/v1/`) for breaking changes only — backward-compatible changes don't need a new version
-- Error responses: Problem Details (RFC 9457) — `type`, `title`, `status`, `detail`; map all domain exceptions to HTTP status codes in a single global handler
+- Versioning: URL path (`/v1/`) for breaking changes only, backward-compatible changes don't need a new version
+- Error responses: Problem Details (RFC 9457), `type`, `title`, `status`, `detail`; map all domain exceptions to HTTP status codes in a single global handler
 
 **gRPC:**
-- Service-to-service communication; always set a deadline on every RPC call — without deadlines, cascading failures are guaranteed (Nygard, *Release It!*)
-- Proto files are contracts — version in a shared repo; never remove a field or change a field number
+- Service-to-service communication; always set a deadline on every RPC call, without deadlines, cascading failures are guaranteed (Nygard, *Release It!*)
+- Proto files are contracts, version in a shared repo; never remove a field or change a field number
 
 **Event-driven:**
 - Choose REST when you need a synchronous response; choose events when the operation is a fact that happened and multiple systems react to it
@@ -127,8 +127,8 @@ Use this table to determine what to produce for each task type:
 
 ## Database Rules
 
-- Start normalised (3NF); denormalise only when a measured read performance problem exists — premature denormalisation creates update anomalies
-- Surrogate keys (UUID v7 / ULID) not natural keys — natural keys change; random UUID v4 causes B-tree page splits on insert
+- Start normalised (3NF); denormalise only when a measured read performance problem exists, premature denormalisation creates update anomalies
+- Surrogate keys (UUID v7 / ULID) not natural keys, natural keys change; random UUID v4 causes B-tree page splits on insert
 - `created_at` and `updated_at` on every table
 - Every foreign key column has an index; every unbounded `WHERE` clause on a large table has a covering index; use `EXPLAIN ANALYZE` before shipping any non-trivial query
 - Migrations: forward-only, backward-compatible, zero-downtime, reviewed as carefully as application code
@@ -139,28 +139,28 @@ Use this table to determine what to produce for each task type:
 
 ## Error Handling
 
-- Wrap all third-party errors at the adapter boundary — `sql.ErrNoRows` becomes `UserNotFoundError` before crossing into the service layer
+- Wrap all third-party errors at the adapter boundary, `sql.ErrNoRows` becomes `UserNotFoundError` before crossing into the service layer
 - OOP: unchecked exceptions for application errors mapped to HTTP status in a single global handler; checked exceptions only for recoverable conditions where the caller must decide
 - FP: `Result<T, E>` / `Either<E, A>` for expected failures (validation, not-found); Railway-Oriented Programming (Wlaschin, *Domain Modeling Made Functional*) chains them without nested conditionals
-- Include entity ID, operation name, and non-sensitive input values in every error — enough context to diagnose without log-trawling
+- Include entity ID, operation name, and non-sensitive input values in every error, enough context to diagnose without log-trawling
 
 ---
 
 ## Security
 
-- Parameterised queries / prepared statements for all SQL — ORM usage does not automatically protect raw query escape hatches
+- Parameterised queries / prepared statements for all SQL, ORM usage does not automatically protect raw query escape hatches
 - OAuth 2.0 + Authorization Code + PKCE for user-facing flows; Client Credentials for service-to-service
 - JWT: validate `alg`, `iss`, `aud`, `exp`, `iat`, `sub`; short-lived access tokens (15 min) + long-lived refresh tokens (HttpOnly cookie or secure storage)
-- Secrets in a vault (AWS Secrets Manager, HashiCorp Vault) or environment variables — never in source code; use `git-secrets` or Gitleaks in CI
+- Secrets in a vault (AWS Secrets Manager, HashiCorp Vault) or environment variables, never in source code; use `git-secrets` or Gitleaks in CI
 - Rate limit input-intensive endpoints (login, signup, password reset) by IP and user fingerprint
 
 ---
 
 ## Testing
 
-- Unit tests: domain logic, calculations, state machines — isolated, no I/O, mocks only at infrastructure boundaries
-- Integration tests: Testcontainers for real PostgreSQL/Redis — never mock the database in integration tests
-- Contract tests (Pact): for service-to-service API boundaries in microservices — runs fast without spinning up the other service
+- Unit tests: domain logic, calculations, state machines, isolated, no I/O, mocks only at infrastructure boundaries
+- Integration tests: Testcontainers for real PostgreSQL/Redis, never mock the database in integration tests
+- Contract tests (Pact): for service-to-service API boundaries in microservices, runs fast without spinning up the other service
 - Every public method: happy path + at least one error/edge case
 - Reset DB state between tests: `@Transactional` rollback or table truncate; never share mutable state across tests
 
@@ -180,17 +180,17 @@ Use this table to determine what to produce for each task type:
 End every response with a confidence signal on its own line:
 
 ```
-CONFIDENCE: [High|Medium|Low] — [one-line reason]
+CONFIDENCE: [High|Medium|Low], [one-line reason]
 ```
 
-- **High** — output is complete, correct, and based on sufficient context
-- **Medium** — output is reasonable but contains an assumption or a gap; state the assumption inline
-- **Low** — insufficient context to produce a reliable result; state what is missing
+- **High**, output is complete, correct, and based on sufficient context
+- **Medium**, output is reasonable but contains an assumption or a gap; state the assumption inline
+- **Low**, insufficient context to produce a reliable result; state what is missing
 
 If the task is outside this skill's scope or you lack the information needed to proceed, return this instead of a confidence signal:
 
 ```
-BLOCKED: [reason] — [what information would unblock this]
+BLOCKED: [reason], [what information would unblock this]
 ```
 
 Do not guess or produce low-quality output to avoid returning BLOCKED. A precise BLOCKED is more useful than a low-confidence guess.

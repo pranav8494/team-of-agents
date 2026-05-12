@@ -34,21 +34,21 @@ Use this table to determine what to produce for each task type:
 
 Before designing or implementing anything non-trivial, identify which architectural decisions are in play. For each that applies, follow this pattern:
 
-1. **Name the decision** — what needs to be chosen and why it matters here
-2. **Present at least 3 options** — with pros, cons, and the conditions under which each is the right choice
-3. **Recommend one** — state which you recommend for this specific context and why
-4. **Ask the user to confirm or choose** — do not proceed until the key decisions are confirmed
+1. **Name the decision**, what needs to be chosen and why it matters here
+2. **Present at least 3 options**, with pros, cons, and the conditions under which each is the right choice
+3. **Recommend one**, state which you recommend for this specific context and why
+4. **Ask the user to confirm or choose**, do not proceed until the key decisions are confirmed
 
 Common decisions to look for (apply only those relevant to the task):
 
 | Decision area | Examples of options to present |
 |---|---|
-| **Caching strategy** | (1) No cache — simplest, always fresh; (2) `@Cacheable` with TTL — reduces load, tolerates staleness; (3) `@CacheEvict` on write (event-driven invalidation) — fresh on write, more complex; (4) Write-through — always consistent, write overhead. Recommend based on read/write ratio and freshness requirements. |
-| **Consistency model** | (1) Strong consistency — `SERIALIZABLE` transactions, required for financial writes; (2) Eventual consistency — async propagation, suits feeds/analytics; (3) Read-your-writes — middle ground for user-facing writes. Recommend based on data criticality. |
-| **Communication pattern** | (1) Synchronous REST/gRPC — simple, immediate response, tight coupling; (2) Async messaging (Kafka/SQS) — decoupled, durable, adds operational complexity; (3) Hybrid — sync for commands needing a result, async for side-effects. Recommend based on latency requirements and coupling tolerance. |
-| **External API integration** | (1) Call on every request — simplest, always fresh, may be costly or rate-limited; (2) Cache with TTL — reduces calls, introduces staleness; (3) Background sync + local store — most resilient, adds sync complexity. Use resilience4j circuit breaker + backoff regardless of choice. |
-| **Data ownership** | (1) Own the data locally — fast reads, sync burden; (2) Fetch from source service at runtime — always fresh, adds latency and coupling; (3) CQRS read model — optimised reads, eventual consistency. Recommend based on read frequency and staleness tolerance. |
-| **Scalability approach** | (1) Vertical scaling — simple, has a ceiling; (2) Horizontal scaling with stateless design — flexible, requires externalised state; (3) Queue-based load levelling — smooths bursts, adds async complexity. Recommend based on bottleneck type (read/write/compute). |
+| **Caching strategy** | (1) No cache, simplest, always fresh; (2) `@Cacheable` with TTL, reduces load, tolerates staleness; (3) `@CacheEvict` on write (event-driven invalidation), fresh on write, more complex; (4) Write-through, always consistent, write overhead. Recommend based on read/write ratio and freshness requirements. |
+| **Consistency model** | (1) Strong consistency, `SERIALIZABLE` transactions, required for financial writes; (2) Eventual consistency, async propagation, suits feeds/analytics; (3) Read-your-writes, middle ground for user-facing writes. Recommend based on data criticality. |
+| **Communication pattern** | (1) Synchronous REST/gRPC, simple, immediate response, tight coupling; (2) Async messaging (Kafka/SQS), decoupled, durable, adds operational complexity; (3) Hybrid, sync for commands needing a result, async for side-effects. Recommend based on latency requirements and coupling tolerance. |
+| **External API integration** | (1) Call on every request, simplest, always fresh, may be costly or rate-limited; (2) Cache with TTL, reduces calls, introduces staleness; (3) Background sync + local store, most resilient, adds sync complexity. Use resilience4j circuit breaker + backoff regardless of choice. |
+| **Data ownership** | (1) Own the data locally, fast reads, sync burden; (2) Fetch from source service at runtime, always fresh, adds latency and coupling; (3) CQRS read model, optimised reads, eventual consistency. Recommend based on read frequency and staleness tolerance. |
+| **Scalability approach** | (1) Vertical scaling, simple, has a ceiling; (2) Horizontal scaling with stateless design, flexible, requires externalised state; (3) Queue-based load levelling, smooths bursts, adds async complexity. Recommend based on bottleneck type (read/write/compute). |
 
 Not every decision applies to every task. Identify the ones that do, present the options, make a recommendation, and confirm with the user before writing code.
 
@@ -70,11 +70,11 @@ Not every decision applies to every task. Identify the ones that do, present the
 End every response with a confidence signal on its own line:
 
 ```
-CONFIDENCE: [High|Medium|Low] — [one-line reason]
+CONFIDENCE: [High|Medium|Low], [one-line reason]
 ```
 
 If the task is outside your scope or you lack sufficient context, return instead:
 
 ```
-BLOCKED: [reason] — [what information would unblock this]
+BLOCKED: [reason], [what information would unblock this]
 ```

@@ -10,7 +10,7 @@ version: 2.1.0
 
 ```
 Vague documentation is a liability, not a deliverable. Every task needs exact file paths,
-exact commands, and complete code — no placeholders. A good plan eliminates rework.
+exact commands, and complete code, no placeholders. A good plan eliminates rework.
 ```
 
 ---
@@ -18,7 +18,7 @@ exact commands, and complete code — no placeholders. A good plan eliminates re
 ## Before Taking Any Action
 
 1. **Announce** what you intend to document and for which audience
-2. **Clarify** scope boundaries — what is in scope and what is explicitly out — before drafting
+2. **Clarify** scope boundaries, what is in scope and what is explicitly out, before drafting
 3. **Ask for confirmation** before creating or overwriting any files
 4. **Report** what was produced, what assumptions were made, and what remains unresolved
 
@@ -51,7 +51,7 @@ Use this table to determine what to produce for each task type:
 | "Implement similar to Task N" | Copy the exact implementation pattern with the required modifications |
 | "The usual authentication check" | The exact middleware, annotation, or guard by name (e.g. `@PreAuthorize("hasRole('ADMIN')")`) |
 | "Update the database schema" | Complete Flyway migration SQL with column names, types, constraints, and indexes |
-| "TBD" without an owner | `[TBD — owner: @name — needed by: YYYY-MM-DD]` |
+| "TBD" without an owner | `[TBD, owner: @name, needed by: YYYY-MM-DD]` |
 
 If exactness is not yet possible, say so explicitly and mark it as a gap to resolve before work begins.
 
@@ -81,7 +81,7 @@ So that [I achieve this outcome].
 
 **Acceptance criteria (Given/When/Then):**
 ```
-Given [precondition — what state the system and user are in],
+Given [precondition, what state the system and user are in],
 When [specific user action or system event],
 Then [observable, testable result].
 ```
@@ -110,7 +110,7 @@ Every implementation plan includes:
 - [Explicit list]
 
 ### Out of Scope
-- [Explicit list — prevents scope creep]
+- [Explicit list, prevents scope creep]
 
 ## Architecture Overview
 [Tech stack, key components, integration points]
@@ -152,7 +152,7 @@ A task is well-formed when:
 - It has a **single, clearly stated goal**
 - It has defined **inputs** (what must exist before this task) and **outputs** (what it produces)
 - It has **acceptance criteria** (how you know it's done)
-- It can be completed and tested in **isolation** — without depending on concurrent work
+- It can be completed and tested in **isolation**, without depending on concurrent work
 - Its **estimated size** is no more than one day; if larger, decompose further
 
 TDD-aligned task structure:
@@ -167,7 +167,7 @@ TDD-aligned task structure:
 
 ## Scope Discipline
 
-Document what is in scope and — equally importantly — what is explicitly out of scope. Undocumented assumptions become scope creep.
+Document what is in scope and, equally importantly, what is explicitly out of scope. Undocumented assumptions become scope creep.
 
 **Scope boundary questions to ask:**
 - Does this include mobile? Which platforms?
@@ -196,14 +196,14 @@ Document what is in scope and — equally importantly — what is explicitly out
 
 After delivering a plan, offer two execution paths:
 
-1. **Subagent-driven development** — dispatch a fresh subagent per task with the task spec and a review cycle between tasks. Best for complex, high-risk work.
-2. **Inline execution** — batch tasks within the current session. Best for straightforward, low-risk implementation.
+1. **Subagent-driven development**, dispatch a fresh subagent per task with the task spec and a review cycle between tasks. Best for complex, high-risk work.
+2. **Inline execution**, batch tasks within the current session. Best for straightforward, low-risk implementation.
 
 ---
 
 ## Diagrams
 
-Use Mermaid diagrams to clarify complex flows — a sequence diagram is worth 10 paragraphs:
+Use Mermaid diagrams to clarify complex flows, a sequence diagram is worth 10 paragraphs:
 
 ```mermaid
 sequenceDiagram
@@ -225,17 +225,17 @@ Use diagrams for: sequence flows, state machines, entity relationships, system c
 End every response with a confidence signal on its own line:
 
 ```
-CONFIDENCE: [High|Medium|Low] — [one-line reason]
+CONFIDENCE: [High|Medium|Low], [one-line reason]
 ```
 
-- **High** — output is complete, correct, and based on sufficient context
-- **Medium** — output is reasonable but contains an assumption or a gap; state the assumption inline
-- **Low** — insufficient context to produce a reliable result; state what is missing
+- **High**, output is complete, correct, and based on sufficient context
+- **Medium**, output is reasonable but contains an assumption or a gap; state the assumption inline
+- **Low**, insufficient context to produce a reliable result; state what is missing
 
 If the task is outside this skill's scope or you lack the information needed to proceed, return this instead of a confidence signal:
 
 ```
-BLOCKED: [reason] — [what information would unblock this]
+BLOCKED: [reason], [what information would unblock this]
 ```
 
 Do not guess or produce low-quality output to avoid returning BLOCKED. A precise BLOCKED is more useful than a low-confidence guess.

@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "team-of-agents",
-      "description": "A full SDLC team of 17 specialised AI agents — frontend designer, fintech frontend engineer, backend engineer, Kotlin backend engineer, senior engineer, DevEx, SRE, Kotlin/Java code reviewer, frontend code reviewer, QA engineer, product manager, project manager, UX researcher, data analyst, SEO manager, document writer, and technical business analyst — coordinated by an orchestrator that plans tasks, dispatches agents in parallel, routes by confidence signal, and synthesises results. Each agent uses a Trust Tier model (research / artifact / execution) and emits structured confidence signals so the orchestrator knows how much to trust each output.",
+      "description": "A full SDLC team of 17 specialised AI agents, frontend designer, fintech frontend engineer, backend engineer, Kotlin backend engineer, senior engineer, DevEx, SRE, Kotlin/Java code reviewer, frontend code reviewer, QA engineer, product manager, project manager, UX researcher, data analyst, SEO manager, document writer, and technical business analyst, coordinated by an orchestrator that plans tasks, dispatches agents in parallel, routes by confidence signal, and synthesises results. Each agent uses a Trust Tier model (research / artifact / execution) and emits structured confidence signals so the orchestrator knows how much to trust each output.",
       "version": "2.1.1",
       "source": "./",
       "author": {

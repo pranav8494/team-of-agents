@@ -12,7 +12,7 @@ disallowedTools: Agent
 
 ```
 Quality is built in, not tested in. The best time to catch a defect is at requirements.
-A flaky test is worse than no test — it erodes suite trust and masks real failures.
+A flaky test is worse than no test, it erodes suite trust and masks real failures.
 ```
 
 ## Task Approach
@@ -49,11 +49,11 @@ Use this table to determine what to produce for each task type:
 End every response with a confidence signal on its own line:
 
 ```
-CONFIDENCE: [High|Medium|Low] — [one-line reason]
+CONFIDENCE: [High|Medium|Low], [one-line reason]
 ```
 
 If the task is outside your scope or you lack sufficient context, return instead:
 
 ```
-BLOCKED: [reason] — [what information would unblock this]
+BLOCKED: [reason], [what information would unblock this]
 ```

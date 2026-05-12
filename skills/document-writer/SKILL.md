@@ -11,7 +11,7 @@ version: 2.1.0
 ```
 Documentation is a product. Write for the reader, not the writer.
 Every API endpoint, CLI flag, and configuration option needs a real, runnable example.
-Examples are not optional — they are the most important part of the documentation.
+Examples are not optional, they are the most important part of the documentation.
 ```
 
 ---
@@ -46,7 +46,7 @@ Use this table to determine what to produce for each task type:
 
 ## Diátaxis Framework (Procida)
 
-Every document falls into exactly one of four quadrants. Mixing types in the same document creates confusion — separate them deliberately.
+Every document falls into exactly one of four quadrants. Mixing types in the same document creates confusion, separate them deliberately.
 
 | Type | Question it answers | Reader state | Key characteristic |
 |---|---|---|---|
@@ -68,7 +68,7 @@ Every document falls into exactly one of four quadrants. Mixing types in the sam
 | Second person for user-facing docs | "Users must configure..." | "Configure your..." |
 | Third person for reference | "The user can set..." | "The API accepts..." |
 | Short sentences | "The configuration file, which is located in the root directory of the project, must contain the database connection string, the API key, and the environment name." | "The configuration file lives in the project root. It must contain three values: the database connection string, the API key, and the environment name." |
-| No jargon without definition | "Use the idempotency key" | "Use the idempotency key — a unique identifier you generate that prevents duplicate operations if the request is retried." |
+| No jargon without definition | "Use the idempotency key" | "Use the idempotency key, a unique identifier you generate that prevents duplicate operations if the request is retried." |
 | Consistent terminology | Mixing "endpoint", "route", "URL", "path" | Pick one term per concept and use it throughout |
 
 ---
@@ -107,7 +107,7 @@ Every document falls into exactly one of four quadrants. Mixing types in the sam
 [What situation does this runbook address?]
 
 ## When to use this runbook
-[Triggering conditions — alert name, error pattern, user-reported symptom]
+[Triggering conditions, alert name, error pattern, user-reported symptom]
 
 ## Prerequisites
 - [Access / permissions required]
@@ -164,9 +164,9 @@ Creates a new payment. Idempotent with the same `idempotency_key`.
 { "payment_id": "pay_xyz789", "status": "pending" }
 ```
 
-**400 Bad Request** — invalid input  
-**409 Conflict** — idempotency key already used with different parameters  
-**422 Unprocessable Entity** — business logic failure (insufficient funds, blocked account)
+**400 Bad Request**, invalid input  
+**409 Conflict**, idempotency key already used with different parameters  
+**422 Unprocessable Entity**, business logic failure (insufficient funds, blocked account)
 ```
 
 ---
@@ -228,7 +228,7 @@ A README is a how-to guide for contributors and consumers of the repository:
 - `/payments` now requires `Idempotency-Key` header
 
 ### Deprecated
-- `POST /v1/send` — use `POST /v2/payments` instead; removed in v3.0
+- `POST /v1/send`, use `POST /v2/payments` instead; removed in v3.0
 
 ### Removed
 - `GET /status` endpoint (deprecated since v1.0)
@@ -259,17 +259,17 @@ A README is a how-to guide for contributors and consumers of the repository:
 End every response with a confidence signal on its own line:
 
 ```
-CONFIDENCE: [High|Medium|Low] — [one-line reason]
+CONFIDENCE: [High|Medium|Low], [one-line reason]
 ```
 
-- **High** — output is complete, correct, and based on sufficient context
-- **Medium** — output is reasonable but contains an assumption or a gap; state the assumption inline
-- **Low** — insufficient context to produce a reliable result; state what is missing
+- **High**, output is complete, correct, and based on sufficient context
+- **Medium**, output is reasonable but contains an assumption or a gap; state the assumption inline
+- **Low**, insufficient context to produce a reliable result; state what is missing
 
 If the task is outside this skill's scope or you lack the information needed to proceed, return this instead of a confidence signal:
 
 ```
-BLOCKED: [reason] — [what information would unblock this]
+BLOCKED: [reason], [what information would unblock this]
 ```
 
 Do not guess or produce low-quality output to avoid returning BLOCKED. A precise BLOCKED is more useful than a low-confidence guess.

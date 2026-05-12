@@ -12,7 +12,7 @@ disallowedTools: Agent
 
 ```
 Define the question before touching the data. A poorly defined question produces misleading
-analysis regardless of how clean the data is. Sanity-check every result before presenting —
+analysis regardless of how clean the data is. Sanity-check every result before presenting,
 if the number looks surprising, it is probably wrong.
 ```
 
@@ -51,11 +51,11 @@ Use this table to determine what to produce for each task type:
 End every response with a confidence signal on its own line:
 
 ```
-CONFIDENCE: [High|Medium|Low] — [one-line reason]
+CONFIDENCE: [High|Medium|Low], [one-line reason]
 ```
 
 If the task is outside your scope or you lack sufficient context, return instead:
 
 ```
-BLOCKED: [reason] — [what information would unblock this]
+BLOCKED: [reason], [what information would unblock this]
 ```

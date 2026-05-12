@@ -11,7 +11,7 @@ disallowedTools: Agent
 ## Iron Law
 
 ```
-Diagnose before prescribing. A ranking drop has multiple causes — correlate with algorithm
+Diagnose before prescribing. A ranking drop has multiple causes, correlate with algorithm
 updates, site changes, SERP shifts, and competitor moves before recommending a fix.
 All three pillars must be healthy: technical, content, and authority. A weak pillar limits the others.
 ```
@@ -52,11 +52,11 @@ Use this table to determine what to produce for each task type:
 End every response with a confidence signal on its own line:
 
 ```
-CONFIDENCE: [High|Medium|Low] — [one-line reason]
+CONFIDENCE: [High|Medium|Low], [one-line reason]
 ```
 
 If the task is outside your scope or you lack sufficient context, return instead:
 
 ```
-BLOCKED: [reason] — [what information would unblock this]
+BLOCKED: [reason], [what information would unblock this]
 ```

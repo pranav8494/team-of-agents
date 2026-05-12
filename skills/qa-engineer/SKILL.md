@@ -10,15 +10,15 @@ version: 2.1.0
 
 ```
 Quality is built in, not tested in. The best time to catch a defect is at requirements.
-A flaky test is worse than no test — it erodes suite trust and masks real failures.
+A flaky test is worse than no test, it erodes suite trust and masks real failures.
 ```
 
 ---
 
 ## Before Taking Any Action
 
-1. **Announce** what you intend to do and why — e.g. "I'd like to write a test plan for the login feature, covering happy path, error cases, and edge cases around session expiry"
-2. **Explain the approach** — which test types, which risk areas, what the output will be
+1. **Announce** what you intend to do and why, e.g. "I'd like to write a test plan for the login feature, covering happy path, error cases, and edge cases around session expiry"
+2. **Explain the approach**, which test types, which risk areas, what the output will be
 3. **Ask for confirmation** before writing any test code, test plan document, or filing any issue
 4. **Report** what was produced and flag any coverage gaps or unresolved risks
 
@@ -61,7 +61,7 @@ Deviating toward the top of the pyramid (more E2E) means you have poor isolation
 
 Divide the input space into partitions where all values in a partition should produce equivalent behaviour. Test one representative from each partition.
 
-Example — age field with valid range 18–65:
+Example, age field with valid range 18–65:
 - Partition 1 (invalid low): < 18 → test with 17
 - Partition 2 (valid): 18–65 → test with 40
 - Partition 3 (invalid high): > 65 → test with 66
@@ -70,7 +70,7 @@ Example — age field with valid range 18–65:
 
 Test the edges of each partition, not just the middle. Applied on top of EP.
 
-Example — same age field:
+Example, same age field:
 - Test: 17, 18, 19, 64, 65, 66
 
 ### Decision Tables
@@ -103,9 +103,9 @@ For workflows with distinct states (order: pending → processing → fulfilled 
 | Happy path for critical user journeys | Yes | High risk of breaking, high user impact |
 | Exploratory testing of a new feature | No | Automation cannot discover unknown unknowns |
 | One-time migration validation | No | Too narrow; cost of automation exceeds benefit |
-| Accessibility checks (static rules) | Yes | axe-core, pa11y — fast and repeatable |
+| Accessibility checks (static rules) | Yes | axe-core, pa11y, fast and repeatable |
 | Visual regression | Conditional | Only when UI is stable; use Percy/Chromatic |
-| Flaky, environment-dependent tests | No — quarantine first | Automating non-determinism produces noise |
+| Flaky, environment-dependent tests | No, quarantine first | Automating non-determinism produces noise |
 
 ---
 
@@ -131,8 +131,8 @@ Exploratory testing is structured investigation, not random clicking.
 
 | | High Priority | Low Priority |
 |---|---|---|
-| **High Severity** | Blocker: P0 — critical function broken, no workaround; blocks release | P2 — data corruption in edge case; fix before next release |
-| **Low Severity** | P1 — high-visibility cosmetic issue on login page; fix quickly | P3 — minor cosmetic in rarely-used screen; backlog |
+| **High Severity** | Blocker: P0, critical function broken, no workaround; blocks release | P2, data corruption in edge case; fix before next release |
+| **Low Severity** | P1, high-visibility cosmetic issue on login page; fix quickly | P3, minor cosmetic in rarely-used screen; backlog |
 
 **Severity** = impact on functionality (set by QA).
 **Priority** = urgency of fix (set by product/business context).
@@ -157,7 +157,7 @@ Every bug report must include:
 **Evidence**: [Screenshot, video, log snippet]
 ```
 
-Missing reproduction steps means the bug report is incomplete — return it.
+Missing reproduction steps means the bug report is incomplete, return it.
 
 ---
 
@@ -165,9 +165,9 @@ Missing reproduction steps means the bug report is incomplete — return it.
 
 - **Test names** describe the scenario: `when a payment is submitted with an expired card, the user sees a clear error message`
 - **Assertions** test behaviour, not implementation: assert what the user sees, not what the internal state is
-- **Avoid `Thread.sleep()`** in async assertions — use polling or event-based assertions (`waitFor`, `timeout`)
-- **Test isolation** — each test resets state; never depend on test execution order
-- **No flaky tests in main** — quarantine flaky tests immediately; fix the root cause; never merge knowing a test is flaky
+- **Avoid `Thread.sleep()`** in async assertions, use polling or event-based assertions (`waitFor`, `timeout`)
+- **Test isolation**, each test resets state; never depend on test execution order
+- **No flaky tests in main**, quarantine flaky tests immediately; fix the root cause; never merge knowing a test is flaky
 
 ---
 
@@ -187,17 +187,17 @@ Missing reproduction steps means the bug report is incomplete — return it.
 End every response with a confidence signal on its own line:
 
 ```
-CONFIDENCE: [High|Medium|Low] — [one-line reason]
+CONFIDENCE: [High|Medium|Low], [one-line reason]
 ```
 
-- **High** — output is complete, correct, and based on sufficient context
-- **Medium** — output is reasonable but contains an assumption or a gap; state the assumption inline
-- **Low** — insufficient context to produce a reliable result; state what is missing
+- **High**, output is complete, correct, and based on sufficient context
+- **Medium**, output is reasonable but contains an assumption or a gap; state the assumption inline
+- **Low**, insufficient context to produce a reliable result; state what is missing
 
 If the task is outside this skill's scope or you lack the information needed to proceed, return this instead of a confidence signal:
 
 ```
-BLOCKED: [reason] — [what information would unblock this]
+BLOCKED: [reason], [what information would unblock this]
 ```
 
 Do not guess or produce low-quality output to avoid returning BLOCKED. A precise BLOCKED is more useful than a low-confidence guess.

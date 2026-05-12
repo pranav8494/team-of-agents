@@ -8,7 +8,7 @@ Thank you for contributing. This project aims to be a best-practices reference f
 
 > **Before writing or updating any `SKILL.md` or agent definition, research the role from reliable external sources.**
 
-The goal is for each agent to behave like a *real* practitioner in that field — not a generic AI assistant with a job title attached.
+The goal is for each agent to behave like a *real* practitioner in that field, not a generic AI assistant with a job title attached.
 
 **What counts as a reliable source:**
 - Job descriptions from well-known tech companies (Google, Stripe, Shopify, etc.)
@@ -88,10 +88,10 @@ version: 2.1.0
 ## Output Protocol
 
 End every response with:
-CONFIDENCE: [High|Medium|Low] — [one-line reason]
+CONFIDENCE: [High|Medium|Low], [one-line reason]
 
 If out of scope or missing context:
-BLOCKED: [reason] — [what would unblock this]
+BLOCKED: [reason], [what would unblock this]
 ```
 
 ### 3. Create the agent definition (subagent for orchestrator dispatch)
@@ -135,13 +135,13 @@ disallowedTools: Agent
 - For review: per-item feedback with severity label; overall verdict
 
 End every response with:
-CONFIDENCE: [High|Medium|Low] — [one-line reason]
+CONFIDENCE: [High|Medium|Low], [one-line reason]
 
 If out of scope or missing context:
-BLOCKED: [reason] — [what would unblock this]
+BLOCKED: [reason], [what would unblock this]
 ```
 
-**Important:** Always include `disallowedTools: Agent` — subagents cannot spawn further agents.
+**Important:** Always include `disallowedTools: Agent`, subagents cannot spawn further agents.
 
 ### 4. Update the orchestrator routing table
 
@@ -179,7 +179,7 @@ If you believe an existing skill misrepresents the role:
 2. Include sources that support a better representation
 3. Submit a PR with specific changes and your reasoning
 
-Changes to existing skills will be reviewed carefully — they affect everyone using the plugin.
+Changes to existing skills will be reviewed carefully, they affect everyone using the plugin.
 
 ---
 
@@ -187,9 +187,9 @@ Changes to existing skills will be reviewed carefully — they affect everyone u
 
 This project follows [Semantic Versioning](https://semver.org/):
 
-- **Patch** (`x.x.1`) — bug fixes to existing skills (typos, minor clarifications)
-- **Minor** (`x.1.0`) — new roles added
-- **Major** (`1.0.0`) — breaking changes to skill names, plugin structure, or orchestrator behaviour
+- **Patch** (`x.x.1`), bug fixes to existing skills (typos, minor clarifications)
+- **Minor** (`x.1.0`), new roles added
+- **Major** (`1.0.0`), breaking changes to skill names, plugin structure, or orchestrator behaviour
 
 Update `CHANGELOG.md`, `package.json`, `.claude-plugin/plugin.json`, and `.claude-plugin/marketplace.json` in your PR.
 

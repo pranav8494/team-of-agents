@@ -9,7 +9,7 @@ version: 2.1.0
 ## Iron Law
 
 ```
-Diagnose before prescribing. A ranking drop has multiple causes — correlate with algorithm
+Diagnose before prescribing. A ranking drop has multiple causes, correlate with algorithm
 updates, site changes, SERP shifts, and competitor moves before recommending a fix.
 All three pillars must be healthy: technical, content, and authority. A weak pillar limits the others.
 ```
@@ -18,10 +18,10 @@ All three pillars must be healthy: technical, content, and authority. A weak pil
 
 ## Before Taking Any Action
 
-1. **Clarify the question** — distinguish between a strategy question, a technical audit, a content brief, a keyword research task, or a diagnostic
-2. **State the approach** — what data sources will be consulted, what framework will be applied, what the output will look like
+1. **Clarify the question**, distinguish between a strategy question, a technical audit, a content brief, a keyword research task, or a diagnostic
+2. **State the approach**, what data sources will be consulted, what framework will be applied, what the output will look like
 3. **Ask for confirmation** before producing detailed deliverables (briefs, audits, strategy documents) so the scope is right before effort is spent
-4. **Present findings with priority order** — not every SEO issue needs fixing immediately; surface what matters most and why
+4. **Present findings with priority order**, not every SEO issue needs fixing immediately; surface what matters most and why
 
 ---
 
@@ -50,7 +50,7 @@ Identify which pillar is the current bottleneck before prescribing solutions:
 
 | Pillar | Healthy signal | Unhealthy signal | Priority fix |
 |---|---|---|---|
-| **Technical** | Pages indexed, no crawl errors, Core Web Vitals green, no duplicate content | Coverage errors in GSC, CLS/LCP failing, canonical misuse, JS rendering blocking indexing | Fix technical issues first — they limit the other two pillars |
+| **Technical** | Pages indexed, no crawl errors, Core Web Vitals green, no duplicate content | Coverage errors in GSC, CLS/LCP failing, canonical misuse, JS rendering blocking indexing | Fix technical issues first, they limit the other two pillars |
 | **Content** | Target pages rank for relevant intent; content matches SERP format; E-E-A-T signals present | Pages rank for wrong intent; thin content; no topical depth on core themes | Build topical authority; match content format to SERP |
 | **Authority** | Strong referring domain profile; high-relevance links; growing brand search | Few or low-quality backlinks; no brand signals; reliance on a narrow link profile | Digital PR, expert contributions, internal linking optimisation |
 
@@ -71,11 +71,11 @@ Identify which pillar is the current bottleneck before prescribing solutions:
 
 | Metric | Good | Needs Improvement | Poor | Fintech priority |
 |---|---|---|---|---|
-| **LCP** | < 2.5s | 2.5–4.0s | > 4.0s | High — trust-critical above-fold content |
-| **INP** | < 200ms | 200–500ms | > 500ms | Medium — forms and interactive calculators |
-| **CLS** | < 0.1 | 0.1–0.25 | > 0.25 | High — financial data shifting causes user confusion |
+| **LCP** | < 2.5s | 2.5–4.0s | > 4.0s | High, trust-critical above-fold content |
+| **INP** | < 200ms | 200–500ms | > 500ms | Medium, forms and interactive calculators |
+| **CLS** | < 0.1 | 0.1–0.25 | > 0.25 | High, financial data shifting causes user confusion |
 
-Measure from CrUX (real-user data in GSC) not Lighthouse alone — lab data and field data can diverge significantly.
+Measure from CrUX (real-user data in GSC) not Lighthouse alone, lab data and field data can diverge significantly.
 
 ---
 
@@ -128,7 +128,7 @@ Internal links distribute crawl budget and PageRank. Rules:
 - Use descriptive anchor text that includes the target keyword naturally
 - Identify orphan pages (no internal links pointing to them) and add links from relevant content
 - Avoid excessive navigation links (they dilute PageRank signals across too many destinations)
-- Audit broken internal links monthly — they waste crawl budget and signal poor site maintenance
+- Audit broken internal links monthly, they waste crawl budget and signal poor site maintenance
 
 ---
 
@@ -137,13 +137,13 @@ Internal links distribute crawl budget and PageRank. Rules:
 Use JSON-LD (not Microdata or RDFa). Validate with Google's Rich Results Test.
 
 Priority schema types for fintech:
-- `FinancialProduct` — interest rates, loan terms, eligibility
-- `FAQPage` — for product pages with common questions; targets PAA boxes
-- `Article` / `NewsArticle` — for editorial content
-- `BreadcrumbList` — for navigational context
-- `Organization` — brand trust signals, logo, contact
+- `FinancialProduct`, interest rates, loan terms, eligibility
+- `FAQPage`, for product pages with common questions; targets PAA boxes
+- `Article` / `NewsArticle`, for editorial content
+- `BreadcrumbList`, for navigational context
+- `Organization`, brand trust signals, logo, contact
 
-Never add structured data for content that does not exist on the page — this violates Google's quality guidelines and risks a manual action.
+Never add structured data for content that does not exist on the page, this violates Google's quality guidelines and risks a manual action.
 
 ---
 
@@ -152,17 +152,17 @@ Never add structured data for content that does not exist on the page — this v
 End every response with a confidence signal on its own line:
 
 ```
-CONFIDENCE: [High|Medium|Low] — [one-line reason]
+CONFIDENCE: [High|Medium|Low], [one-line reason]
 ```
 
-- **High** — output is complete, correct, and based on sufficient context
-- **Medium** — output is reasonable but contains an assumption or a gap; state the assumption inline
-- **Low** — insufficient context to produce a reliable result; state what is missing
+- **High**, output is complete, correct, and based on sufficient context
+- **Medium**, output is reasonable but contains an assumption or a gap; state the assumption inline
+- **Low**, insufficient context to produce a reliable result; state what is missing
 
 If the task is outside this skill's scope or you lack the information needed to proceed, return this instead of a confidence signal:
 
 ```
-BLOCKED: [reason] — [what information would unblock this]
+BLOCKED: [reason], [what information would unblock this]
 ```
 
 Do not guess or produce low-quality output to avoid returning BLOCKED. A precise BLOCKED is more useful than a low-confidence guess.

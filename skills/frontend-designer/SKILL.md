@@ -9,7 +9,7 @@ version: 2.1.0
 ## Iron Law
 
 ```
-Semantic HTML first, CSS second, JavaScript third. WCAG 2.1 AA is non-negotiable —
+Semantic HTML first, CSS second, JavaScript third. WCAG 2.1 AA is non-negotiable,
 inaccessible UIs exclude users and create legal risk. Never reach for JS to solve what HTML or CSS already solves.
 ```
 
@@ -17,8 +17,8 @@ inaccessible UIs exclude users and create legal risk. Never reach for JS to solv
 
 ## Before Taking Any Action
 
-1. **Announce** what you intend to do and why — e.g. "I'd like to create `src/components/Button.tsx` to implement the primary button variant from your design system"
-2. **Explain the approach** — component structure, styling strategy, accessibility considerations, trade-offs
+1. **Announce** what you intend to do and why, e.g. "I'd like to create `src/components/Button.tsx` to implement the primary button variant from your design system"
+2. **Explain the approach**, component structure, styling strategy, accessibility considerations, trade-offs
 3. **Ask for confirmation** before writing or editing any file, running any command, or fetching any external resource
 4. **Report** what was created or changed when done, and how to use or extend it
 
@@ -45,7 +45,7 @@ Use this table to determine what to produce for each task type:
 
 ## Paradigm: Progressive Enhancement
 
-Build in layers — each layer degrades gracefully:
+Build in layers, each layer degrades gracefully:
 
 1. **HTML layer**: semantic structure that works with no CSS and no JS
 2. **CSS layer**: visual presentation that works without JS
@@ -64,7 +64,7 @@ Do not build features that break entirely without JS when HTML/CSS could handle 
 | UI state local to one component | `useState` |
 | Derived state | Compute inline or `useMemo` for expensive computations |
 | Shared state across a subtree | Context (for low-frequency updates) or Zustand (for high-frequency) |
-| Async data fetching | React Query / SWR — not `useEffect` + `useState` |
+| Async data fetching | React Query / SWR, not `useEffect` + `useState` |
 | Reusable behaviour | Custom hook |
 | Compound UI (Tabs, Accordion) | Compound component pattern with Context |
 
@@ -137,11 +137,11 @@ Do not build features that break entirely without JS when HTML/CSS could handle 
 | Server-rendered content | BEM + custom properties (no runtime overhead) |
 | Micro-frontend / multi-team | CSS Modules (hard scope boundaries) |
 
-**Design tokens are the source of truth.** Colour, spacing, typography — defined once in the token system, never as magic numbers in components.
+**Design tokens are the source of truth.** Colour, spacing, typography, defined once in the token system, never as magic numbers in components.
 
 **Tailwind discipline:**
 - Extract a component with `@apply` only when a pattern repeats 3+ times across files
-- Never put `@apply` in component files — define it in a shared stylesheet or component class
+- Never put `@apply` in component files, define it in a shared stylesheet or component class
 - Prefer `cn()` / `clsx()` for conditional classes over inline ternaries
 
 ---
@@ -159,7 +159,7 @@ Do not build features that break entirely without JS when HTML/CSS could handle 
 
 ## Testing
 
-- Component tests: Testing Library with accessible queries (`getByRole`, `getByLabelText`) — never `getByTestId` unless nothing else works
+- Component tests: Testing Library with accessible queries (`getByRole`, `getByLabelText`), never `getByTestId` unless nothing else works
 - Test behaviour, not implementation: assert what the user sees and can interact with
 - Accessibility unit testing: `@testing-library/jest-dom` + `axe-core` (`toHaveNoViolations()`)
 - E2E: Playwright for critical user journeys only
@@ -171,17 +171,17 @@ Do not build features that break entirely without JS when HTML/CSS could handle 
 End every response with a confidence signal on its own line:
 
 ```
-CONFIDENCE: [High|Medium|Low] — [one-line reason]
+CONFIDENCE: [High|Medium|Low], [one-line reason]
 ```
 
-- **High** — output is complete, correct, and based on sufficient context
-- **Medium** — output is reasonable but contains an assumption or a gap; state the assumption inline
-- **Low** — insufficient context to produce a reliable result; state what is missing
+- **High**, output is complete, correct, and based on sufficient context
+- **Medium**, output is reasonable but contains an assumption or a gap; state the assumption inline
+- **Low**, insufficient context to produce a reliable result; state what is missing
 
 If the task is outside this skill's scope or you lack the information needed to proceed, return this instead of a confidence signal:
 
 ```
-BLOCKED: [reason] — [what information would unblock this]
+BLOCKED: [reason], [what information would unblock this]
 ```
 
 Do not guess or produce low-quality output to avoid returning BLOCKED. A precise BLOCKED is more useful than a low-confidence guess.

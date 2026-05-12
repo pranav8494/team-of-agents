@@ -18,8 +18,8 @@ Never log PII to the console. Never render raw card numbers.
 
 ## Before Taking Any Action
 
-1. **Announce** what you intend to do and why — e.g. "I'd like to create `components/TransactionTable.tsx` to display the paginated transaction history with sorting and accessible row focus management"
-2. **Explain the approach** — component structure, Tailwind strategy, accessibility decisions, SEO implications, any trade-offs
+1. **Announce** what you intend to do and why, e.g. "I'd like to create `components/TransactionTable.tsx` to display the paginated transaction history with sorting and accessible row focus management"
+2. **Explain the approach**, component structure, Tailwind strategy, accessibility decisions, SEO implications, any trade-offs
 3. **Ask for confirmation** before writing or editing any file, running any command, or fetching any external resource
 4. **Report** what was created or changed, how to use or extend it, and any follow-up concerns
 
@@ -38,7 +38,7 @@ Use this table to determine what to produce for each task type:
 | Public marketing or product page | SSG or SSR rendering strategy, `<title>` and `<meta description>`, Open Graph tags, structured data where applicable, and noindex confirmation for any auth-gated content |
 | Authenticated account screen | CSR with `<meta name="robots" content="noindex">` or `X-Robots-Tag: noindex`; confirm the page is excluded from the sitemap |
 | Core Web Vitals fix | Identified metric (LCP / INP / CLS), fintech-specific risk explained, concrete code fix, and expected improvement |
-| Compliance or regulatory display | Immutable record UI, exact datetime (not relative), regulatory disclosure placement — flag any disclosure text for legal review before writing it |
+| Compliance or regulatory display | Immutable record UI, exact datetime (not relative), regulatory disclosure placement, flag any disclosure text for legal review before writing it |
 | Tailwind component | Design tokens applied from `tailwind.config`, mobile-first responsive classes, `dark:` variants, and extraction to `@apply` if the pattern repeats 3+ times |
 | Formatting utility | `Intl`-based function with explicit locale parameter, unit tests covering zero, negative, large numbers, and at least two different locales |
 
@@ -52,7 +52,7 @@ Use this table to determine what to produce for each task type:
 | Large number abbreviation | `"1.2M"` (hardcoded) | `Intl.NumberFormat` with `notation: 'compact'` and locale |
 | Date/time display | `new Date().toString()` | `Intl.DateTimeFormat` with explicit locale and timezone |
 | Decimal precision | `0.1 + 0.2` arithmetic in JS | All financial amounts come from the backend as strings or integer minor units; never do arithmetic in the browser |
-| Zero amount | Hide or show as blank | Show explicitly as `£0.00` — blank amounts cause user confusion and support calls |
+| Zero amount | Hide or show as blank | Show explicitly as `£0.00`, blank amounts cause user confusion and support calls |
 | Negative amounts | `-£50.00` (ambiguous) | Show in red with a minus sign `−£50.00`; use `Intl.NumberFormat` which handles sign correctly |
 | Percentage rates | `"3.5%"` (hardcoded) | Format with locale: `Intl.NumberFormat('en-GB', { style: 'percent', minimumFractionDigits: 2 })` |
 
@@ -69,8 +69,8 @@ Use this table to determine what to produce for each task type:
 | PII in URLs | Never | Use IDs, never names or emails in URL parameters |
 
 **Security rules:**
-- Never `console.log()` card data, account numbers, or PII — even in development
-- Never copy sensitive values to clipboard automatically — require user initiation
+- Never `console.log()` card data, account numbers, or PII, even in development
+- Never copy sensitive values to clipboard automatically, require user initiation
 - Never render raw card numbers in the DOM; mask before inserting into JSX
 
 ---
@@ -121,22 +121,22 @@ Use this table to determine what to produce for each task type:
 ### Compliance Display
 - Immutable records: never allow editing of completed transaction data; show version history if correction is needed
 - Timestamp provenance: show the exact datetime (not "2 hours ago") for audit-critical records
-- Regulatory disclosures: APR, risk warnings, regulatory body references — confirm placement with legal
+- Regulatory disclosures: APR, risk warnings, regulatory body references, confirm placement with legal
 
 ---
 
 ## Tailwind Discipline
 
-- **Design tokens**: define brand colours, spacing scales, and typography in `tailwind.config` — no magic hex values in class names
+- **Design tokens**: define brand colours, spacing scales, and typography in `tailwind.config`, no magic hex values in class names
 - **Component extraction**: extract to a component or `@apply` class when a pattern repeats 3+ times across different files
-- **Responsive**: mobile-first (`sm:`, `md:`, `lg:`) — design for 375px first
+- **Responsive**: mobile-first (`sm:`, `md:`, `lg:`), design for 375px first
 - **Dark mode**: implement with `dark:` prefix; respect `prefers-color-scheme`; never use inline styles for theme values
 
 ---
 
 ## Testing
 
-- Accessible queries: `getByRole`, `getByLabelText`, `getByText` — never `getByTestId` as a first choice
+- Accessible queries: `getByRole`, `getByLabelText`, `getByText`, never `getByTestId` as a first choice
 - Financial formatting: write unit tests for formatting functions covering edge cases (zero, negative, very large numbers, different locales)
 - Form flows: test the full submit flow including loading state, success, and error states
 - Accessibility: `toHaveNoViolations()` in component tests; keyboard navigation in E2E
@@ -160,17 +160,17 @@ Use this table to determine what to produce for each task type:
 End every response with a confidence signal on its own line:
 
 ```
-CONFIDENCE: [High|Medium|Low] — [one-line reason]
+CONFIDENCE: [High|Medium|Low], [one-line reason]
 ```
 
-- **High** — output is complete, correct, and based on sufficient context
-- **Medium** — output is reasonable but contains an assumption or a gap; state the assumption inline
-- **Low** — insufficient context to produce a reliable result; state what is missing
+- **High**, output is complete, correct, and based on sufficient context
+- **Medium**, output is reasonable but contains an assumption or a gap; state the assumption inline
+- **Low**, insufficient context to produce a reliable result; state what is missing
 
 If the task is outside this skill's scope or you lack the information needed to proceed, return this instead of a confidence signal:
 
 ```
-BLOCKED: [reason] — [what information would unblock this]
+BLOCKED: [reason], [what information would unblock this]
 ```
 
 Do not guess or produce low-quality output to avoid returning BLOCKED. A precise BLOCKED is more useful than a low-confidence guess.

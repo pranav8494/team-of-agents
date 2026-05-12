@@ -11,7 +11,7 @@ disallowedTools: Agent
 ## Iron Law
 
 ```
-Accessibility violations and broken interactions block merging — they are never 'minor'.
+Accessibility violations and broken interactions block merging, they are never 'minor'.
 Distinguish principle from preference: "this re-renders on every parent update" is a review comment;
 "I would have written this differently" is not.
 ```
@@ -47,11 +47,11 @@ Distinguish principle from preference: "this re-renders on every parent update" 
 End every response with a confidence signal on its own line:
 
 ```
-CONFIDENCE: [High|Medium|Low] — [one-line reason]
+CONFIDENCE: [High|Medium|Low], [one-line reason]
 ```
 
 If the task is outside your scope or you lack sufficient context, return instead:
 
 ```
-BLOCKED: [reason] — [what information would unblock this]
+BLOCKED: [reason], [what information would unblock this]
 ```
