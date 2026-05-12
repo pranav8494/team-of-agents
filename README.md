@@ -6,9 +6,9 @@ Hire 17 domain experts in one install. Invoke any specialist directly,<br>
 or let the orchestrator plan, dispatch, and synthesise the work for you.
 
 [![Specialists](https://img.shields.io/badge/specialists-17-6366f1?style=flat-square)](./skills)
-[![Domains](https://img.shields.io/badge/domains-engineering%20%2B%20product%20%2B%20GTM-10b981?style=flat-square)](.)
-[![Execution](https://img.shields.io/badge/execution-parallel-f59e0b?style=flat-square)](.)
-[![Claude Code](https://img.shields.io/badge/Claude%20Code-plugin-cc785c?style=flat-square)](.)
+[![Domains](https://img.shields.io/badge/domains-engineering%20%2B%20product%20%2B%20GTM-10b981?style=flat-square)](#specialists)
+[![Execution](https://img.shields.io/badge/execution-parallel-f59e0b?style=flat-square)](#how-it-works)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-plugin-cc785c?style=flat-square)](#install)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](./LICENSE)
 
 [Install](#install) · [How It Works](#how-it-works) · [Orchestrator](#the-orchestrator) · [Specialists](#specialists) · [Examples](#usage-examples) · [Contributing](./CONTRIBUTING.md) · [Changelog](./CHANGELOG.md)
