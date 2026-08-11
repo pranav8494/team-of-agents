@@ -154,15 +154,16 @@ The recommended entry point for complex or multi-domain tasks.
 
 | Skill | Invoke | Best For |
 |-------|--------|----------|
-| Frontend Designer | `/frontend-designer` | React, CSS, design systems, accessibility, web performance |
+| Frontend Planner | `/frontend-planner` | Frontend task breakdown, project conventions, codebase assessment |
+| Frontend Engineer | `/frontend-engineer` | Building components, data integration, state, executing a plan |
 | Backend Engineer | `/backend-engineer` | APIs, databases, microservices, authentication, system design |
 | Kotlin Backend Engineer | `/kotlin-backend-engineer` | Kotlin/Spring Boot, fintech backend, JVM architecture |
-| Fintech Frontend Engineer | `/fintech-frontend-engineer` | React/Tailwind fintech UI, payment flows, Core Web Vitals, SEO |
+| Fintech Frontend Engineer | `/fintech-frontend-engineer` | Domain shim: frontend-engineer + the fintech overlay |
 | Senior Engineer | `/senior-engineer` | Architecture review, technical design, refactoring, trade-off analysis |
 | DevEx Engineer | `/devex` | CI/CD pipelines, developer tooling, build optimisation, local dev setup |
 | SRE | `/sre` | SLO/error budget design, observability, runbooks, postmortems, IaC |
 | Kotlin/Java Code Reviewer | `/kotlin-code-reviewer` | Review Kotlin/Java diffs, Spring Boot, Flyway migrations |
-| Frontend Code Reviewer | `/frontend-code-reviewer` | Review React/TypeScript diffs, accessibility, performance |
+| Frontend Reviewer | `/frontend-reviewer` | Review frontend diffs, audit repos, check convention drift |
 | QA Engineer | `/qa-engineer` | Test plans, test cases, automation strategy, quality standards |
 
 ### Product
@@ -192,7 +193,8 @@ The recommended entry point for complex or multi-domain tasks.
 /orchestrator   I'm not sure where to start, here's the brief: [paste brief]
 
 # Engineering
-/frontend-designer       create a responsive navbar with a mobile hamburger menu
+/frontend-planner        break down the checkout redesign into tasks
+/frontend-engineer       create a responsive navbar with a mobile hamburger menu
 /backend-engineer        design a REST API for user authentication with JWT
 /kotlin-backend-engineer implement a payment idempotency pattern in Spring Boot
 /senior-engineer         review this architecture decision for our notification system
@@ -200,7 +202,7 @@ The recommended entry point for complex or multi-domain tasks.
 /sre                     define SLOs and error budget policy for our payments API
 /sre                     we had a major incident last night, help me write the postmortem
 /kotlin-code-reviewer    [paste diff] review this Kotlin service layer change
-/frontend-code-reviewer  [paste diff] review this React component for accessibility
+/frontend-reviewer       [paste diff] review this React component for accessibility
 /qa-engineer             write a test plan for the login and registration flow
 
 # Product
@@ -261,13 +263,14 @@ team-of-agents/
 │   ├── orchestrator/SKILL.md ← plans tasks, dispatches agents, synthesises results
 │   ├── backend-engineer/SKILL.md
 │   ├── kotlin-backend-engineer/SKILL.md
-│   ├── frontend-designer/SKILL.md
-│   ├── fintech-frontend-engineer/SKILL.md
+│   ├── frontend-planner/SKILL.md
+│   ├── frontend-engineer/SKILL.md
+│   ├── frontend-reviewer/SKILL.md
+│   ├── fintech-frontend-engineer/SKILL.md  ← domain shim over frontend-engineer
 │   ├── senior-engineer/SKILL.md
 │   ├── devex/SKILL.md
 │   ├── sre/SKILL.md
 │   ├── kotlin-code-reviewer/SKILL.md
-│   ├── frontend-code-reviewer/SKILL.md
 │   ├── qa-engineer/SKILL.md
 │   ├── product-manager/SKILL.md
 │   ├── project-manager/SKILL.md
@@ -276,6 +279,10 @@ team-of-agents/
 │   ├── seo-manager/SKILL.md
 │   ├── document-writer/SKILL.md
 │   └── technical-business-analyst/SKILL.md
+├── overlays/                   ← composable knowledge, loaded by the frontend skills
+│   ├── domains/                ← what the app is about (fintech, travel, …)
+│   └── stacks/                 ← what it is built with (expo-universal, …)
+├── agents/                     ← condensed subagent definitions for orchestrator dispatch
 ├── hooks/
 │   ├── hooks.json            ← SessionStart hook registration
 │   └── session-start         ← injects orchestrator skill at session start

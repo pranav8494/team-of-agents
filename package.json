@@ -1,6 +1,6 @@
 {
   "name": "team-of-agents",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "A Claude Code plugin providing a full SDLC team of specialised AI agents with an orchestrator that plans tasks and dispatches specialist subagents.",
   "repository": {
     "type": "git",
@@ -22,6 +22,9 @@
     "ai-team",
     "sdlc",
     "frontend",
+    "frontend-planner",
+    "frontend-engineer",
+    "frontend-reviewer",
     "backend",
     "kotlin",
     "data-analyst",

@@ -11,6 +11,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.0.0] - 2026-08-11
+
+Breaking. The frontend skills are replaced by a composable trio plus an overlay mechanism, so domain
+and stack knowledge is inherited rather than copied into a forked skill.
+
+### Migration
+
+| Was | Now |
+|---|---|
+| `/frontend-designer` | `/frontend-engineer` |
+| `/frontend-code-reviewer` | `/frontend-reviewer` |
+| `/fintech-frontend-engineer` | Unchanged name; now a shim over `frontend-engineer` + `overlays/domains/fintech.md` |
+
+### Added
+- `frontend-planner` skill and agent — recon, conventions capture, and task breakdown. Writes
+  `FRONTEND-CONVENTIONS.md` when a repo has none, marking each rule observed or proposed
+- `frontend-engineer` skill and agent — implementation, modular component contract, data integration
+- `frontend-reviewer` skill and agent — PR review and repo audit against the repo's own conventions
+- `overlays/domains/` and `overlays/stacks/` — composable knowledge on two axes, each file structured
+  as `## Plan deltas` / `## Build deltas` / `## Review deltas`, one section per base skill
+- `overlays/domains/fintech.md` — money display, sensitive data, compliance rules, carried over from
+  the former `fintech-frontend-engineer` skill
+- `overlays/stacks/expo-universal.md` — Expo SDK 53 / React Native 0.79 / React 19 /
+  react-native-web / Expo Router, version-stamped and marked verify-before-use
+- `_TEMPLATE.md` in both overlay directories
+- Overlay-load rule in every frontend skill's Iron Law: load applicable overlays, announce which were
+  loaded or state "no overlay", never invent domain or stack rules
+
+### Changed
+- `fintech-frontend-engineer` skill and agent reduced to shims over the base plus the fintech overlay
+- Orchestrator: routing table, disambiguation table, agent-name list, frontend rule, and quick
+  reference updated for the new trio; dispatches should now name the domain and stack
+- README specialist tables, usage examples, and repository structure
+
+### Removed
+- `frontend-designer` skill and agent, superseded by `frontend-engineer`
+- `frontend-code-reviewer` skill and agent, superseded by `frontend-reviewer`
+
+---
+
 ## [2.1.0] - 2026-05-06
 
 ### Added

@@ -8,8 +8,8 @@
   "plugins": [
     {
       "name": "team-of-agents",
-      "description": "A full SDLC team of 17 specialised AI agents, frontend designer, fintech frontend engineer, backend engineer, Kotlin backend engineer, senior engineer, DevEx, SRE, Kotlin/Java code reviewer, frontend code reviewer, QA engineer, product manager, project manager, UX researcher, data analyst, SEO manager, document writer, and technical business analyst, coordinated by an orchestrator that plans tasks, dispatches agents in parallel, routes by confidence signal, and synthesises results. Each agent uses a Trust Tier model (research / artifact / execution) and emits structured confidence signals so the orchestrator knows how much to trust each output.",
-      "version": "2.1.1",
+      "description": "A full SDLC team of 18 specialised AI agents, coordinated by an orchestrator that plans tasks, dispatches agents in parallel, routes by confidence signal, and synthesises results. Frontend work is handled by a composable trio, frontend planner, frontend engineer, and frontend reviewer, that stays domain-agnostic and inherits domain knowledge (fintech, travel, and so on) and stack knowledge from overlay files, so a new domain is one small file rather than a forked skill. Alongside them: backend engineer, Kotlin backend engineer, senior engineer, DevEx, SRE, Kotlin/Java code reviewer, QA engineer, product manager, project manager, UX researcher, data analyst, SEO manager, document writer, and technical business analyst. Each agent uses a Trust Tier model (research / artifact / execution) and emits structured confidence signals so the orchestrator knows how much to trust each output.",
+      "version": "3.0.0",
       "source": "./",
       "author": {
         "name": "Pranav Pandey",
