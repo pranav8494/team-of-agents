@@ -358,10 +358,13 @@ If the critic returns `OVERALL: Needs revision`, surface the flagged issues to t
 1. Identify the affected skill and describe the correction in one sentence.
 2. Run via the Bash tool:
 ```bash
-mkdir -p "${CLAUDE_PROJECT_ROOT}/.team-of-agents"
-echo '{"id":"<8-char-hex>","session_id":"<ISO-timestamp>","skill":"<skill>","category":"correction|preference|pattern","summary":"<one sentence>","detail":"<fuller description>","captured_at":"<ISO-timestamp>","reviewed":false}' \
-  >> "${CLAUDE_PROJECT_ROOT}/.team-of-agents/session-log.jsonl"
+ROOT="${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
+mkdir -p "${ROOT}/.team-of-agents"
+cat >> "${ROOT}/.team-of-agents/session-log.jsonl" <<'EOF'
+{"id":"<8-char-hex>","session_id":"<ISO-timestamp>","skill":"<skill>","category":"correction|preference|pattern","summary":"<one sentence>","detail":"<fuller description>","captured_at":"<ISO-timestamp>","reviewed":false}
+EOF
 ```
+The quoted heredoc keeps apostrophes in `summary` or `detail` from breaking the shell. Escape any `"` or `\` inside values as JSON requires, and keep each entry on a single line.
 3. Output one line: `Learning captured. Run /team-of-agents:skill-reflector to review.`
 
 Write one entry per distinct correction. Derive `id` as a short hash of session timestamp + summary. If no corrections occurred, skip this phase entirely with no output.

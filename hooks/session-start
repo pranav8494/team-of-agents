@@ -20,10 +20,77 @@ escape_for_json() {
     printf '%s' "$s"
 }
 
-team_skill_escaped=$(escape_for_json "$team_skill_content")
+# ── Approved learnings (project-level + global, deduplicated by id) ───────────
+# Global is listed first so a project entry with the same id wins.
+PROJECT_LEARNINGS="${CLAUDE_PROJECT_DIR:-$PWD}/.team-of-agents/approved-learnings.json"
+GLOBAL_LEARNINGS="${HOME}/.claude/plugins/team-of-agents/approved-learnings.json"
 
-session_context="<IMPORTANT>\nYou have a full SDLC team of specialised AI agents available. Use the Skill tool to invoke any specialist, or invoke the orchestrator to have it plan the work and dispatch agents automatically.\n\nBelow is the orchestrator skill, it breaks tasks into subtasks, assigns specialists, dispatches subagents, and synthesises results:\n\n${team_skill_escaped}\n</IMPORTANT>"
+learnings_files=()
+for f in "${GLOBAL_LEARNINGS}" "${PROJECT_LEARNINGS}"; do
+    [[ -s "$f" ]] && learnings_files+=("$f")
+done
 
-printf '{\n  "hookSpecificOutput": {\n    "hookEventName": "SessionStart",\n    "additionalContext": "%s"\n  }\n}\n' "$session_context"
+jq_install_hint() {
+    if command -v brew >/dev/null 2>&1; then
+        echo "brew install jq"
+    elif command -v apt-get >/dev/null 2>&1; then
+        echo "sudo apt-get install -y jq"
+    elif command -v dnf >/dev/null 2>&1; then
+        echo "sudo dnf install -y jq"
+    elif command -v pacman >/dev/null 2>&1; then
+        echo "sudo pacman -S jq"
+    else
+        echo "see https://jqlang.org/download/"
+    fi
+}
+
+learnings_block=""
+system_message=""
+if [[ ${#learnings_files[@]} -gt 0 ]]; then
+    if command -v jq >/dev/null 2>&1; then
+        merged=$(jq -rs '
+            flatten |
+            group_by(.id) | map(last) |
+            map("- [" + .skill + "] " + .summary)[]
+        ' "${learnings_files[@]}" 2>/dev/null || true)
+        if [[ -n "$merged" ]]; then
+            learnings_block="
+
+<approved-learnings>
+User-approved preferences from past sessions — apply without re-asking:
+${merged}
+</approved-learnings>"
+        fi
+    else
+        # Learnings exist but cannot be parsed. Tell the user directly, and ask
+        # Claude to offer the install rather than silently dropping them.
+        install_cmd=$(jq_install_hint)
+        system_message="team-of-agents: approved learnings were found but not loaded because jq is not installed. Install it with: ${install_cmd}"
+        learnings_block="
+
+<jq-missing>
+The team-of-agents plugin found approved learnings (${learnings_files[*]}) but could not load them because \`jq\` is not installed.
+At the start of your first reply, tell the user this in one line and ask whether they want you to install jq by running: ${install_cmd}
+Only run the install after the user explicitly agrees. Once installed, the learnings load on the next session start (or after /clear).
+</jq-missing>"
+    fi
+fi
+
+session_context="<IMPORTANT>
+You have a full SDLC team of specialised AI agents available. Use the Skill tool to invoke any specialist, or invoke the orchestrator to have it plan the work and dispatch agents automatically.
+
+Below is the orchestrator skill, it breaks tasks into subtasks, assigns specialists, dispatches subagents, and synthesises results:
+
+${team_skill_content}${learnings_block}
+</IMPORTANT>"
+
+session_context_escaped=$(escape_for_json "$session_context")
+
+if [[ -n "$system_message" ]]; then
+    system_message_escaped=$(escape_for_json "$system_message")
+    printf '{\n  "systemMessage": "%s",\n  "hookSpecificOutput": {\n    "hookEventName": "SessionStart",\n    "additionalContext": "%s"\n  }\n}\n' "$system_message_escaped" "$session_context_escaped"
+else
+    printf '{\n  "hookSpecificOutput": {\n    "hookEventName": "SessionStart",\n    "additionalContext": "%s"\n  }\n}\n' "$session_context_escaped"
+fi
 
 exit 0

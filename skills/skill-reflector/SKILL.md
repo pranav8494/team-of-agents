@@ -1,0 +1,157 @@
+---
+name: skill-reflector
+description: Use when reviewing session learnings, approving or discarding captured patterns, promoting recurring patterns into permanent skill improvements, or proposing PRs to the plugin repo. Invoke after any session where the team-of-agents captured new learnings.
+version: 1.0.0
+---
+
+# Skill Reflector
+
+## Iron Law
+
+```
+A learning that is never reviewed is noise. A learning reviewed and approved becomes
+institutional memory. The only purpose of this skill is to close that loop.
+```
+
+---
+
+## Before Taking Any Action
+
+1. Announce the project root you resolved and the log file you will read.
+2. Present all unreviewed entries as a numbered review table — never approve anything silently.
+3. Wait for explicit user input before writing to any approved-learnings.json.
+4. Report final counts: N approved, N skipped, and any PR candidates surfaced.
+
+---
+
+## Phase 1 — Read Pending Entries
+
+Resolve the project root: the git top-level directory of the current working directory, or the
+working directory itself outside a git repo. Then read the session log with the Read tool (never bash):
+
+- `{project root}/.team-of-agents/session-log.jsonl`
+
+The orchestrator captures every learning here. Scope (project or global) is decided at approval time,
+not capture time, so there is no global session log.
+
+Filter to entries where `reviewed: false`. If the file does not exist or has no unreviewed entries,
+say so and skip to Phase 4.
+
+---
+
+## Phase 2 — Present Review Table
+
+Render all unreviewed entries as a single numbered table.
+
+```
+#  | Skill             | Category   | Summary
+---|-------------------|------------|------------------------------------
+1  | backend-engineer  | preference | Use snake_case for DB column names
+2  | frontend-engineer | correction | Avoid inline styles in React components
+3  | qa-engineer       | pattern    | Always test the empty-list edge case
+```
+
+Then ask: "Enter numbers to approve (e.g. 1 3), 'all', or 'none'."
+
+For the approved entries, ask for scope in one question:
+
+"Scope for each? `project` applies only in this repo, `global` applies in every project.
+Default is project. (e.g. `1 project, 3 global`, or `all project`)"
+
+---
+
+## Phase 3 — Process Approvals
+
+For each approved entry:
+
+1. Read the target approved-learnings.json for the chosen scope:
+   - project: `{project root}/.team-of-agents/approved-learnings.json`
+   - global: `~/.claude/plugins/team-of-agents/approved-learnings.json`
+   If it does not exist, treat it as `[]` and create its directory before writing.
+2. Check whether an existing entry for the same skill already says the same thing. Summaries are
+   written fresh each session, so match on meaning, not exact text, and name the match you found.
+   - If yes: increment `seen_count` by 1, leave all other fields unchanged.
+   - If no: append a new entry with `seen_count: 1`, `pr_proposed: false`, and `scope` set to the chosen scope.
+3. Show the exact diff to the user and ask for confirmation before writing.
+4. Write changes using the Edit or Write tool.
+5. Mark the original session-log entry `reviewed: true`.
+
+For each skipped entry, mark `reviewed: true` without writing to approved-learnings.json.
+
+---
+
+## Phase 4 — PR Threshold Check
+
+After processing, read both approved-learnings.json files (project and global, whichever exist) and
+check for entries where:
+
+- `seen_count >= 3` AND
+- `pr_proposed == false`
+
+For each match, surface this block:
+
+```
+[Skill Reflector] Recurring pattern detected — seen 3+ times:
+  Skill:    {skill}
+  Summary:  {summary}
+  Detail:   {detail}
+
+Propose a PR to the plugin repo to make this permanent? (yes / no)
+```
+
+If the user answers yes:
+
+1. Show the exact text to be added to `skills/{skill}/SKILL.md` — a minimal addition (one bullet, one table row, or one rule block). Do not rewrite the whole file.
+2. Ask: "Write this change and open a PR? (yes / no)"
+3. If confirmed: write the change using the Edit tool, then instruct the user to run:
+   ```
+   gh pr create --title "skill({skill}): add {summary}" --body "Recurring pattern approved {seen_count} times via skill-reflector."
+   ```
+4. Set `pr_proposed: true` on the entry in the file it came from.
+
+If the user answers no, set `pr_proposed: true` as well so the same pattern is not proposed every run.
+
+---
+
+## Phase 5 — Report
+
+```
+Skill Reflector complete.
+  Approved:             N entries written to approved-learnings.json
+  Skipped:              N entries marked reviewed, not approved
+  PR candidates surfaced: N
+```
+
+---
+
+## File Schemas
+
+**session-log.jsonl** — one JSON object per line:
+```json
+{"id":"...","session_id":"...","skill":"...","category":"preference|correction|pattern","summary":"...","detail":"...","captured_at":"...","reviewed":false}
+```
+
+**approved-learnings.json** — JSON array:
+```json
+[{"id":"...","skill":"...","category":"...","summary":"...","detail":"...","approved_at":"...","seen_count":1,"pr_proposed":false,"scope":"project|global"}]
+```
+
+---
+
+## Output Protocol
+
+End every response with a confidence signal on its own line:
+
+```
+CONFIDENCE: [High|Medium|Low] — [one-line reason]
+```
+
+- **High** — output is complete, correct, and based on sufficient context
+- **Medium** — output is reasonable but contains an assumption or a gap; state the assumption inline
+- **Low** — insufficient context to produce a reliable result; state what is missing
+
+If the task is outside this skill's scope or you lack the information needed to proceed, return this instead:
+
+```
+BLOCKED: [reason] — [what information would unblock this]
+```
