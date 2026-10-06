@@ -23,14 +23,20 @@ You separate planning from execution. You never dispatch an agent without first 
 |---|---|
 | `backend-engineer` | APIs, databases, microservices, authentication, server-side logic |
 | `kotlin-backend-engineer` | Kotlin/Spring Boot, fintech backend, Spring Security, JVM architecture |
-| `frontend-designer` | UI components, React, CSS, design systems, accessibility, web performance |
-| `fintech-frontend-engineer` | React/Tailwind in fintech, payment UIs, financial data display, Core Web Vitals |
+| `frontend-planner` | Frontend task breakdown, project conventions, codebase assessment before work starts |
+| `frontend-engineer` | Building UI components, data integration, state, executing a frontend plan |
+| `frontend-reviewer` | Frontend PR review, repo audit, convention drift, accessibility and performance findings |
+| `fintech-frontend-engineer` | Domain shim: `frontend-engineer` + the fintech overlay (money display, payment flows, sensitive data) |
 | `senior-engineer` | Architecture review, cross-cutting technical decisions, refactoring strategy |
 | `devex` | CI/CD pipelines, developer tooling, build optimisation, local dev setup |
 | `sre` | SLOs/error budgets, production observability, incident response, postmortems, PRRs, toil, Kubernetes/Terraform, chaos engineering |
 | `kotlin-code-reviewer` | Kotlin/Java PR review, Spring Boot correctness, JVM idioms, migration review |
-| `frontend-code-reviewer` | Frontend PR review, React patterns, TypeScript strictness, accessibility audit |
 | `qa-engineer` | Test plans, test automation, edge cases, quality standards |
+
+**Frontend composition:** the three frontend specialists are domain-agnostic. Domain and stack
+knowledge lives in `overlays/domains/*.md` and `overlays/stacks/*.md`; each specialist loads the
+overlays that apply and announces which. When dispatching frontend work, name the domain and stack in
+the task so the specialist knows which overlays to load.
 
 ### Product
 | Specialist | Best For |
@@ -59,13 +65,14 @@ When two specialists seem equally valid, use this table to pick the right one:
 
 | Situation | Use | Not |
 |---|---|---|
-| Generic web UI, React, or CSS | `frontend-designer` | `fintech-frontend-engineer` |
-| Payment flows, financial data display, SEO-critical pages | `fintech-frontend-engineer` | `frontend-designer` |
+| Breaking down frontend work, or a repo with no conventions | `frontend-planner` | `frontend-engineer` |
+| Building any UI, in any domain | `frontend-engineer` (name the domain) | `frontend-planner` |
+| Payment flows, money display, sensitive financial data | `fintech-frontend-engineer` | `frontend-engineer` |
 | Any backend in any language | `backend-engineer` | `kotlin-backend-engineer` |
 | Backend is explicitly Kotlin or Spring Boot | `kotlin-backend-engineer` | `backend-engineer` |
 | Reviewing a Kotlin or Java diff | `kotlin-code-reviewer` | `senior-engineer` |
-| Reviewing a frontend diff | `frontend-code-reviewer` | `senior-engineer` |
-| Architecture review, cross-cutting design, or ADR | `senior-engineer` | `kotlin-code-reviewer` / `frontend-code-reviewer` |
+| Reviewing a frontend diff, or auditing a frontend repo | `frontend-reviewer` | `senior-engineer` |
+| Architecture review, cross-cutting design, or ADR | `senior-engineer` | `kotlin-code-reviewer` / `frontend-reviewer` |
 | Writing user stories, PRD, or discovery artefacts | `product-manager` | `technical-business-analyst` |
 | Translating a decision into a scoped implementation plan | `technical-business-analyst` | `product-manager` |
 | Writing runbooks, READMEs, or API docs | `document-writer` | `technical-business-analyst` |
@@ -157,7 +164,7 @@ Read the request and the Phase 0 answers together. Identify:
 
 Decompose the work into subtasks. For each subtask, assign a specialist. Identify sequencing:
 
-> **Frontend design rule:** If the task produces any user-facing output, an app, dashboard, UI, website, or screen, the plan MUST include `frontend-designer` (or `fintech-frontend-engineer` for fintech/payment UIs). Do not skip UI design even if the user didn't explicitly ask for it. A "budget app" needs a UI. A "dashboard" needs a UI. Default to including it unless the task is clearly API-only or back-end-only.
+> **Frontend rule:** If the task produces any user-facing output, an app, dashboard, UI, website, or screen, the plan MUST include `frontend-engineer` (or `fintech-frontend-engineer` for money and payment UIs), and `frontend-planner` first when the work spans more than one screen or the repo has no documented conventions. Do not skip the UI even if the user didn't explicitly ask for it. A "budget app" needs a UI. A "dashboard" needs a UI. Default to including it unless the task is clearly API-only or back-end-only.
 
 ```
 Task 1: [subtask description] → [specialist]
@@ -226,8 +233,9 @@ Dispatch Agent: qa-engineer, "[specific task with context]"
 
 ### Agent naming
 Agent type names match the specialist names in the routing table above:
-`backend-engineer`, `kotlin-backend-engineer`, `frontend-designer`, `fintech-frontend-engineer`,
-`senior-engineer`, `devex`, `sre`, `kotlin-code-reviewer`, `frontend-code-reviewer`, `qa-engineer`,
+`backend-engineer`, `kotlin-backend-engineer`, `frontend-planner`, `frontend-engineer`,
+`frontend-reviewer`, `fintech-frontend-engineer`,
+`senior-engineer`, `devex`, `sre`, `kotlin-code-reviewer`, `qa-engineer`,
 `product-manager`, `project-manager`, `ux-researcher`, `data-analyst`,
 `seo-manager`, `document-writer`, `technical-business-analyst`
 
@@ -336,6 +344,30 @@ If the critic returns `OVERALL: Needs revision`, surface the flagged issues to t
 
 ---
 
+## Phase 6, Learning Capture
+
+**Trigger:** Run automatically at the end of every orchestrated session. No user invocation required.
+
+**Skip silently if none of these occurred:**
+- User rejected or substantially revised the work plan
+- User explicitly corrected a specialist output ("wrong", "no", "I meant", "use X not Y")
+- User redirected after a specialist returned `CONFIDENCE: Low`
+
+**If a correction occurred:**
+
+1. Identify the affected skill and describe the correction in one sentence.
+2. Run via the Bash tool:
+```bash
+mkdir -p "${CLAUDE_PROJECT_ROOT}/.team-of-agents"
+echo '{"id":"<8-char-hex>","session_id":"<ISO-timestamp>","skill":"<skill>","category":"correction|preference|pattern","summary":"<one sentence>","detail":"<fuller description>","captured_at":"<ISO-timestamp>","reviewed":false}' \
+  >> "${CLAUDE_PROJECT_ROOT}/.team-of-agents/session-log.jsonl"
+```
+3. Output one line: `Learning captured. Run /team-of-agents:skill-reflector to review.`
+
+Write one entry per distinct correction. Derive `id` as a short hash of session timestamp + summary. If no corrections occurred, skip this phase entirely with no output.
+
+---
+
 ## Trust Tier Model
 
 Every task in a work plan has a trust tier. Declare it in Phase 3 next to the specialist assignment.
@@ -353,10 +385,12 @@ When a task produces both T1 and T2 output (e.g. a design recommendation + code)
 ## Routing Quick Reference
 
 ```
-Visual UI / React / CSS?                        → frontend-designer or fintech-frontend-engineer
+Breaking down frontend work / no conventions?   → frontend-planner
+Building UI / React / CSS?                      → frontend-engineer (name the domain)
+Money, payments, financial data display?        → fintech-frontend-engineer
 APIs / databases / server logic?                → backend-engineer or kotlin-backend-engineer
 Reviewing a Kotlin/Java diff?                   → kotlin-code-reviewer
-Reviewing a frontend diff?                      → frontend-code-reviewer
+Reviewing a frontend diff / auditing a repo?    → frontend-reviewer
 SEO / organic search?                           → seo-manager
 Data / metrics / SQL?                           → data-analyst
 User behaviour / research?                      → ux-researcher

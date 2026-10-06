@@ -171,6 +171,40 @@ Your PR description should include:
 
 ---
 
+## Adding a Domain or Stack Overlay
+
+The frontend skills (`frontend-planner`, `frontend-engineer`, `frontend-reviewer`) are
+domain-agnostic. Domain knowledge (fintech, travel, healthcare) and stack knowledge (a framework and
+its versions) live in `overlays/` and are inherited, never copied into a forked skill.
+
+**To add one:** copy `overlays/domains/_TEMPLATE.md` or `overlays/stacks/_TEMPLATE.md` and fill in the
+three required headings. Keep them verbatim, the base skills look for them by name:
+
+```markdown
+## Plan deltas     ← read by frontend-planner
+## Build deltas    ← read by frontend-engineer
+## Review deltas   ← read by frontend-reviewer
+```
+
+**Rules:**
+- **Deltas only.** A rule that applies to any domain belongs in the base skill. An overlay that
+  restates base rules has started drifting, delete the restatement.
+- **Stack overlays are version-stamped** and carry a verify-before-applying header. The installed
+  versions in the target repo always win over the overlay.
+- **Review deltas carry severity labels** (`[blocker]`, `[major]`, `[minor]`) so they slot straight
+  into a review.
+- **Research-First applies here too.** Cite sources in the PR, especially for stack overlays.
+
+**Optional shim.** To make `/travel-frontend-engineer` resolve, add a short
+`skills/travel-frontend-engineer/SKILL.md` that invokes `frontend-engineer` and applies the overlay.
+Use `skills/fintech-frontend-engineer/SKILL.md` as the model. A shim contains no rules of its own.
+
+**Test it.** Invoke the shim and confirm the response announces both parts, e.g.
+"frontend-engineer + travel overlay". A silently skipped overlay is the failure mode this mechanism
+has to guard against, so the announcement is the thing to verify.
+
+---
+
 ## Improving an Existing Role
 
 If you believe an existing skill misrepresents the role:
