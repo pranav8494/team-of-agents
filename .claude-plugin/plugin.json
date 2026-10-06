@@ -1,7 +1,7 @@
 {
   "name": "team-of-agents",
   "description": "A Claude Code plugin providing a full SDLC team of specialised AI agents with an orchestrator that plans tasks and dispatches specialist subagents: a composable frontend trio (planner, engineer, reviewer) with domain and stack overlays, backend engineer, Kotlin engineer, data analyst, UX researcher, senior engineer, DevEx, SRE, product manager, project manager, QA engineer, document writer, Kotlin code reviewer, SEO manager, and technical business analyst.",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "author": {
     "name": "Pranav Pandey",
     "url": "https://github.com/pranav8494"

@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [3.1.0] - 2026-10-07
+
 ### Added
 - `skill-reflector` skill — reviews learnings the orchestrator captured from your corrections, lets you
   approve each as project or global, and offers a PR once a learning has been approved three times
