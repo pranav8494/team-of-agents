@@ -119,7 +119,8 @@ If the user answers yes:
    (`git -C <path> remote get-url origin` mentions `team-of-agents`). Then show the commands and ask
    "Run these? (yes / no)" before running any of them:
    ```bash
-   git -C <path> switch -c learning/{skill}-<short-slug>
+   git -C <path> fetch origin
+   git -C <path> switch -c learning/{skill}-<short-slug> origin/main
    # apply the edit to <path>/skills/{skill}/SKILL.md with the Edit tool, using the absolute path
    git -C <path> add skills/{skill}/SKILL.md
    git -C <path> commit -m "skill({skill}): <short title>"
