@@ -11,6 +11,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.1.0] - 2026-10-07
+
+### Added
+- `skill-reflector` skill — reviews learnings the orchestrator captured from your corrections, lets you
+  approve each as project or global, and offers a PR once a learning has been approved three times
+- Session-start hook loads approved learnings from `.team-of-agents/approved-learnings.json` (project)
+  and `~/.claude/plugins/team-of-agents/approved-learnings.json` (global). Each file is parsed on its
+  own, malformed entries are skipped, and an unparseable file produces a warning instead of dropping
+  every learning
+- If learnings exist but `jq` is not installed, the hook shows a warning with the install command and
+  asks Claude to offer the install
+
+### Fixed
+- Orchestrator learning capture used `CLAUDE_PROJECT_ROOT`, which Claude Code does not set, so it tried
+  to write to `/.team-of-agents`. It now resolves the project root from `CLAUDE_PROJECT_DIR`, the git
+  top level, or the working directory, and appends via a quoted heredoc so apostrophes are safe
+- Session-start hook builds its JSON output with jq when available, cutting startup from about 8 s to
+  under 0.3 s on macOS bash 3.2 and ruling out invalid JSON from control characters
+
+---
+
 ## [3.0.0] - 2026-08-11
 
 Breaking. The frontend skills are replaced by a composable trio plus an overlay mechanism, so domain

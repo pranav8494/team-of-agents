@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Hook for team-of-agents plugin at SessionStart.
 # Injects the orchestrator skill into every new session so Claude
-# knows the full agent roster is available without manual invocation.
+# knows the full agent roster is available without manual invocation,
+# along with any learnings the user approved via skill-reflector.
 
 set -euo pipefail
 
@@ -10,6 +11,7 @@ PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 team_skill_content=$(cat "${PLUGIN_ROOT}/skills/orchestrator/SKILL.md" 2>&1 || echo "Error reading orchestrator skill")
 
+# Fallback escaper, used only when jq is unavailable. Slow on large input.
 escape_for_json() {
     local s="$1"
     s="${s//\\/\\\\}"
@@ -20,10 +22,124 @@ escape_for_json() {
     printf '%s' "$s"
 }
 
-team_skill_escaped=$(escape_for_json "$team_skill_content")
+has_jq=false
+command -v jq >/dev/null 2>&1 && has_jq=true
 
-session_context="<IMPORTANT>\nYou have a full SDLC team of specialised AI agents available. Use the Skill tool to invoke any specialist, or invoke the orchestrator to have it plan the work and dispatch agents automatically.\n\nBelow is the orchestrator skill, it breaks tasks into subtasks, assigns specialists, dispatches subagents, and synthesises results:\n\n${team_skill_escaped}\n</IMPORTANT>"
+# ── Approved learnings (project-level + global, deduplicated by id) ───────────
+# The project root is the git top level of the launch directory, so it matches
+# where the orchestrator and skill-reflector read and write. Global is listed
+# first so a project entry with the same id wins.
+PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$PWD}"
+PROJECT_ROOT=$(git -C "$PROJECT_DIR" rev-parse --show-toplevel 2>/dev/null || echo "$PROJECT_DIR")
+PROJECT_LEARNINGS="${PROJECT_ROOT}/.team-of-agents/approved-learnings.json"
+GLOBAL_LEARNINGS=""
+[[ -n "${HOME:-}" ]] && GLOBAL_LEARNINGS="${HOME}/.claude/plugins/team-of-agents/approved-learnings.json"
 
-printf '{\n  "hookSpecificOutput": {\n    "hookEventName": "SessionStart",\n    "additionalContext": "%s"\n  }\n}\n' "$session_context"
+learnings_files=()
+for f in "${GLOBAL_LEARNINGS}" "${PROJECT_LEARNINGS}"; do
+    [[ -n "$f" && -s "$f" ]] && learnings_files+=("$f")
+done
+
+jq_install_hint() {
+    if command -v brew >/dev/null 2>&1; then
+        echo "brew install jq"
+    elif command -v apt-get >/dev/null 2>&1; then
+        echo "sudo apt-get install -y jq"
+    elif command -v dnf >/dev/null 2>&1; then
+        echo "sudo dnf install -y jq"
+    elif command -v pacman >/dev/null 2>&1; then
+        echo "sudo pacman -S jq"
+    fi
+}
+
+# Normalise one file to a JSON array of well-formed entries. Tolerates a single
+# object or nested arrays; drops entries without a string summary. Control
+# characters and angle brackets are stripped so a summary cannot break out of
+# the surrounding tags.
+LEARNINGS_FILTER='
+    def entries: if type == "array" then .[] | entries elif type == "object" then . else empty end;
+    [ entries | select(has("summary") and (.summary | type == "string") and (.summary | test("\\S"))) ]
+    | map({
+        key: ((.id // (((.skill // "") | tostring) + .summary)) | tostring),
+        skill: ((.skill // "general") | tostring | gsub("[\u0000-\u001f<>\\[\\]]"; " ") | .[0:60]),
+        summary: (.summary | gsub("[\u0000-\u001f<>]"; " ") | .[0:300])
+      })
+'
+
+learnings_block=""
+system_message=""
+if [[ ${#learnings_files[@]} -gt 0 ]]; then
+    if $has_jq; then
+        parsed=()
+        bad_files=()
+        for f in "${learnings_files[@]}"; do
+            if out=$(jq -c "$LEARNINGS_FILTER" "$f" 2>/dev/null); then
+                [[ -n "$out" ]] && parsed+=("$out")
+            else
+                bad_files+=("$f")
+            fi
+        done
+        merged=""
+        if [[ ${#parsed[@]} -gt 0 ]]; then
+            merged=$(printf '%s\n' "${parsed[@]}" | jq -rs '
+                add // [] | group_by(.key) | map(last)[]
+                | "- [" + .skill + "] " + .summary
+            ' 2>/dev/null || true)
+        fi
+        if [[ -n "$merged" ]]; then
+            learnings_block="
+
+<approved-learnings>
+Preferences approved via skill-reflector in past sessions (project entries may come from the repo). Apply them unless they conflict with the user's current instructions:
+${merged}
+</approved-learnings>"
+        fi
+        if [[ ${#bad_files[@]} -gt 0 ]]; then
+            system_message="team-of-agents: could not read learnings from ${bad_files[*]}, so those were skipped. Check the file is a JSON array of entries."
+        fi
+    else
+        # Learnings exist but cannot be parsed. Tell the user directly, and ask
+        # Claude to offer the install rather than silently dropping them.
+        install_cmd=$(jq_install_hint)
+        if [[ -n "$install_cmd" ]]; then
+            system_message="team-of-agents: approved learnings were found but not loaded because jq is not installed. Install it with: ${install_cmd}"
+            install_ask="ask whether they want you to install jq by running: ${install_cmd}
+Only run the install after the user explicitly agrees."
+        else
+            system_message="team-of-agents: approved learnings were found but not loaded because jq is not installed. See https://jqlang.org/download/"
+            install_ask="point them to https://jqlang.org/download/ to install it, since no supported package manager was found."
+        fi
+        learnings_block="
+
+<jq-missing>
+The team-of-agents plugin found approved learnings (${learnings_files[*]}) but could not load them because \`jq\` is not installed.
+At the start of your first reply, tell the user this in one line and ${install_ask}
+Once installed, the learnings load on the next session start (or after /clear).
+</jq-missing>"
+    fi
+fi
+
+session_context="<IMPORTANT>
+You have a full SDLC team of specialised AI agents available. Use the Skill tool to invoke any specialist, or invoke the orchestrator to have it plan the work and dispatch agents automatically.
+
+Below is the orchestrator skill, it breaks tasks into subtasks, assigns specialists, dispatches subagents, and synthesises results:
+
+${team_skill_content}${learnings_block}
+</IMPORTANT>"
+
+if $has_jq; then
+    jq -n --arg ctx "$session_context" --arg msg "$system_message" '
+        (if $msg != "" then {systemMessage: $msg} else {} end)
+        + {hookSpecificOutput: {hookEventName: "SessionStart", additionalContext: $ctx}}
+    '
+else
+    session_context_escaped=$(escape_for_json "$session_context")
+    if [[ -n "$system_message" ]]; then
+        system_message_escaped=$(escape_for_json "$system_message")
+        printf '{\n  "systemMessage": "%s",\n  "hookSpecificOutput": {\n    "hookEventName": "SessionStart",\n    "additionalContext": "%s"\n  }\n}\n' "$system_message_escaped" "$session_context_escaped"
+    else
+        printf '{\n  "hookSpecificOutput": {\n    "hookEventName": "SessionStart",\n    "additionalContext": "%s"\n  }\n}\n' "$session_context_escaped"
+    fi
+fi
 
 exit 0

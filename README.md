@@ -183,6 +183,12 @@ The recommended entry point for complex or multi-domain tasks.
 | SEO Manager | `/seo-manager` | SEO strategy, keyword research, technical SEO audits, ranking diagnostics |
 | Document Writer | `/document-writer` | API docs, runbooks, onboarding guides, READMEs, ADRs, release notes |
 
+### Meta
+
+| Skill | Invoke | Best For |
+|-------|--------|----------|
+| Skill Reflector | `/skill-reflector` | Review learnings captured from your corrections, approve them, promote recurring ones into the skills |
+
 ---
 
 ## Usage Examples
@@ -232,6 +238,22 @@ No agent will silently modify your codebase. You are always in control.
 
 ---
 
+## Learning From Corrections
+
+When you correct an orchestrated session ("no, use X not Y"), the orchestrator writes a one-line
+learning to `.team-of-agents/session-log.jsonl` in your project. Nothing is applied until you review it:
+
+1. Run `/skill-reflector` to see pending learnings, approve the ones you want, and choose a scope:
+   **project** (`.team-of-agents/approved-learnings.json`, commit it to share with your team) or
+   **global** (`~/.claude/plugins/team-of-agents/approved-learnings.json`, applies in every project).
+2. Approved learnings are injected at every session start, so specialists apply them without re-asking.
+3. A learning approved three or more times is offered as a PR that adds it to the skill permanently.
+
+Loading learnings needs [`jq`](https://jqlang.org/download/). If it is missing, the session-start hook
+tells you and Claude offers to install it.
+
+---
+
 ## Sub-agent Dispatching
 
 When invoked via the orchestrator, specialists run as subagents, isolated Claude instances with focused prompts:
@@ -257,7 +279,7 @@ Each skill is grounded in real-world practice: DORA, SPACE, Diátaxis, SOLID, Fo
 ```
 team-of-agents/
 ├── .claude-plugin/
-│   ├── plugin.json           ← plugin metadata + skills manifest
+│   ├── plugin.json           ← plugin metadata
 │   └── marketplace.json      ← marketplace listing
 ├── skills/                   ← user-invocable skill definitions
 │   ├── orchestrator/SKILL.md ← plans tasks, dispatches agents, synthesises results
@@ -278,14 +300,15 @@ team-of-agents/
 │   ├── data-analyst/SKILL.md
 │   ├── seo-manager/SKILL.md
 │   ├── document-writer/SKILL.md
-│   └── technical-business-analyst/SKILL.md
+│   ├── technical-business-analyst/SKILL.md
+│   └── skill-reflector/SKILL.md ← reviews and approves captured learnings
 ├── overlays/                   ← composable knowledge, loaded by the frontend skills
 │   ├── domains/                ← what the app is about (fintech, travel, …)
 │   └── stacks/                 ← what it is built with (expo-universal, …)
 ├── agents/                     ← condensed subagent definitions for orchestrator dispatch
 ├── hooks/
 │   ├── hooks.json            ← SessionStart hook registration
-│   └── session-start         ← injects orchestrator skill at session start
+│   └── session-start         ← injects orchestrator skill and approved learnings at session start
 ├── CHANGELOG.md
 ├── CONTRIBUTING.md
 └── README.md
