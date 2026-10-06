@@ -26,8 +26,14 @@ institutional memory. The only purpose of this skill is to close that loop.
 
 ## Phase 1 — Read Pending Entries
 
-Resolve the project root: the git top-level directory of the current working directory, or the
-working directory itself outside a git repo. Then read the session log with the Read tool (never bash):
+Resolve the project root with this one Bash command, the same rule the orchestrator and the
+session-start hook use:
+
+```bash
+DIR="${CLAUDE_PROJECT_DIR:-$PWD}"; git -C "$DIR" rev-parse --show-toplevel 2>/dev/null || echo "$DIR"
+```
+
+Then read the session log with the Read tool (use Read, not bash, for every file in this skill):
 
 - `{project root}/.team-of-agents/session-log.jsonl`
 
@@ -78,6 +84,9 @@ For each approved entry:
 
 For each skipped entry, mark `reviewed: true` without writing to approved-learnings.json.
 
+Mark entries reviewed with the Edit tool, changing `"reviewed":false` to `"reviewed":true` on that
+entry's line only. Never rewrite the whole log with Write, since another session may have appended to it.
+
 ---
 
 ## Phase 4 — PR Threshold Check
@@ -101,13 +110,28 @@ Propose a PR to the plugin repo to make this permanent? (yes / no)
 
 If the user answers yes:
 
-1. Show the exact text to be added to `skills/{skill}/SKILL.md` — a minimal addition (one bullet, one table row, or one rule block). Do not rewrite the whole file.
-2. Ask: "Write this change and open a PR? (yes / no)"
-3. If confirmed: write the change using the Edit tool, then instruct the user to run:
+1. Show the exact text to be added to the plugin's `skills/{skill}/SKILL.md` — a minimal addition
+   (one bullet, one table row, or one rule block). Do not rewrite the whole file.
+2. The change belongs in the plugin repo (`pranav8494/team-of-agents`), not the project you are in, and
+   the installed plugin copy is not a git checkout. Ask: "Path to your local clone of team-of-agents?
+   (or `none` to just get the text)"
+3. If the user gives a path, confirm it is a clone of the plugin repo
+   (`git -C <path> remote get-url origin` mentions `team-of-agents`). Then show the commands and ask
+   "Run these? (yes / no)" before running any of them:
+   ```bash
+   cd <path>
+   git switch -c learning/{skill}-<short-slug>
+   # apply the edit to <path>/skills/{skill}/SKILL.md with the Edit tool, using the absolute path
+   git commit -am "skill({skill}): <short title>"
+   git push -u origin HEAD
+   gh pr create --repo pranav8494/team-of-agents --title "skill({skill}): <short title>" \
+     --body "Recurring pattern approved {seen_count} times via skill-reflector."
    ```
-   gh pr create --title "skill({skill}): add {summary}" --body "Recurring pattern approved {seen_count} times via skill-reflector."
-   ```
-4. Set `pr_proposed: true` on the entry in the file it came from.
+   Write `<short title>` yourself from the summary, without quotes or backticks.
+4. If the user answers `none`, or the path is not a clone of the plugin repo, print the proposed text
+   and the link `https://github.com/pranav8494/team-of-agents/issues/new` so they can file it. Do not
+   edit files in the current project.
+5. Set `pr_proposed: true` on the entry in the file it came from.
 
 If the user answers no, set `pr_proposed: true` as well so the same pattern is not proposed every run.
 

@@ -358,16 +358,18 @@ If the critic returns `OVERALL: Needs revision`, surface the flagged issues to t
 1. Identify the affected skill and describe the correction in one sentence.
 2. Run via the Bash tool:
 ```bash
-ROOT="${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
+DIR="${CLAUDE_PROJECT_DIR:-$PWD}"
+ROOT=$(git -C "$DIR" rev-parse --show-toplevel 2>/dev/null || echo "$DIR")
 mkdir -p "${ROOT}/.team-of-agents"
+[ -f "${ROOT}/.team-of-agents/.gitignore" ] || echo "session-log.jsonl" > "${ROOT}/.team-of-agents/.gitignore"
 cat >> "${ROOT}/.team-of-agents/session-log.jsonl" <<'EOF'
 {"id":"<8-char-hex>","session_id":"<ISO-timestamp>","skill":"<skill>","category":"correction|preference|pattern","summary":"<one sentence>","detail":"<fuller description>","captured_at":"<ISO-timestamp>","reviewed":false}
 EOF
 ```
-The quoted heredoc keeps apostrophes in `summary` or `detail` from breaking the shell. Escape any `"` or `\` inside values as JSON requires, and keep each entry on a single line.
+This root rule matches the session-start hook and skill-reflector, so learnings are read from where they are written. The `.gitignore` keeps the raw log out of commits; `approved-learnings.json` next to it is meant to be committed. The quoted heredoc keeps apostrophes in `summary` or `detail` from breaking the shell. Escape any `"` or `\` inside values as JSON requires, and keep each entry on a single line.
 3. Output one line: `Learning captured. Run /team-of-agents:skill-reflector to review.`
 
-Write one entry per distinct correction. Derive `id` as a short hash of session timestamp + summary. If no corrections occurred, skip this phase entirely with no output.
+Write one entry per distinct correction. For `id`, use 8 random hex characters (for example from `openssl rand -hex 4`). If no corrections occurred, skip this phase entirely with no output.
 
 ---
 
