@@ -57,9 +57,10 @@ jq_install_hint() {
 # characters and angle brackets are stripped so a summary cannot break out of
 # the surrounding tags.
 LEARNINGS_FILTER='
-    [ .. | objects | select(has("summary") and (.summary | type == "string")) ]
+    def entries: if type == "array" then .[] | entries elif type == "object" then . else empty end;
+    [ entries | select(has("summary") and (.summary | type == "string")) ]
     | map({
-        key: (.id // ((.skill // "") + (.summary)) | tostring),
+        key: ((.id // (((.skill // "") | tostring) + .summary)) | tostring),
         skill: ((.skill // "general") | tostring),
         summary: (.summary | gsub("[\u0000-\u001f<>]"; " ") | .[0:300])
       })
@@ -73,7 +74,7 @@ if [[ ${#learnings_files[@]} -gt 0 ]]; then
         bad_files=()
         for f in "${learnings_files[@]}"; do
             if out=$(jq -c "$LEARNINGS_FILTER" "$f" 2>/dev/null); then
-                parsed+=("$out")
+                [[ -n "$out" ]] && parsed+=("$out")
             else
                 bad_files+=("$f")
             fi
@@ -81,9 +82,9 @@ if [[ ${#learnings_files[@]} -gt 0 ]]; then
         merged=""
         if [[ ${#parsed[@]} -gt 0 ]]; then
             merged=$(printf '%s\n' "${parsed[@]}" | jq -rs '
-                add | group_by(.key) | map(last)[]
+                add // [] | group_by(.key) | map(last)[]
                 | "- [" + .skill + "] " + .summary
-            ')
+            ' 2>/dev/null || true)
         fi
         if [[ -n "$merged" ]]; then
             learnings_block="
@@ -94,7 +95,7 @@ ${merged}
 </approved-learnings>"
         fi
         if [[ ${#bad_files[@]} -gt 0 ]]; then
-            system_message="team-of-agents: could not parse ${bad_files[*]}, so its learnings were skipped. Check that it is valid JSON."
+            system_message="team-of-agents: could not read learnings from ${bad_files[*]}, so those were skipped. Check the file is a JSON array of entries."
         fi
     else
         # Learnings exist but cannot be parsed. Tell the user directly, and ask

@@ -119,15 +119,18 @@ If the user answers yes:
    (`git -C <path> remote get-url origin` mentions `team-of-agents`). Then show the commands and ask
    "Run these? (yes / no)" before running any of them:
    ```bash
-   cd <path>
-   git switch -c learning/{skill}-<short-slug>
+   git -C <path> switch -c learning/{skill}-<short-slug>
    # apply the edit to <path>/skills/{skill}/SKILL.md with the Edit tool, using the absolute path
-   git commit -am "skill({skill}): <short title>"
-   git push -u origin HEAD
-   gh pr create --repo pranav8494/team-of-agents --title "skill({skill}): <short title>" \
+   git -C <path> add skills/{skill}/SKILL.md
+   git -C <path> commit -m "skill({skill}): <short title>"
+   git -C <path> push -u origin HEAD
+   gh pr create --repo pranav8494/team-of-agents --head <owner>:learning/{skill}-<short-slug> \
+     --title "skill({skill}): <short title>" \
      --body "Recurring pattern approved {seen_count} times via skill-reflector."
    ```
-   Write `<short title>` yourself from the summary, without quotes or backticks.
+   Write `<short title>` yourself from the summary, without quotes or backticks. `<owner>` is the
+   GitHub owner of the clone's `origin` (the user's fork, or `pranav8494`). Use `git -C` rather than
+   `cd`, so the session's working directory stays in the user's project. Stage only that one file.
 4. If the user answers `none`, or the path is not a clone of the plugin repo, print the proposed text
    and the link `https://github.com/pranav8494/team-of-agents/issues/new` so they can file it. Do not
    edit files in the current project.
